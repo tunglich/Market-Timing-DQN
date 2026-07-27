@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Editors / OS
+.vscode/
+.idea/
+.cursor/
+.DS_Store
+Thumbs.db
+
+# Training artefacts (kept out of git; regenerate locally)
+saves/
+runs/
+signal/
+best_model/
+logs/
+*.log
+*.err
+*.tfevents.*
+events.out.tfevents.*
+tune_v8/
+optuna_v8.db
+
+# Backtest outputs
+backtest_*/
+rewards-*.png
+
+# Temp
+*.tmp
+*.bak

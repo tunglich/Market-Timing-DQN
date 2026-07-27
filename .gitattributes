@@ -1,0 +1,9 @@
+# Store trained DQN checkpoints via Git LFS.
+trained_models/**/*.data filter=lfs diff=lfs merge=lfs -text
+# Normalize text line endings.
+*.py    text eol=lf
+*.md    text eol=lf
+*.csv   text eol=lf
+*.txt   text eol=lf
+*.yaml  text eol=lf
+*.yml   text eol=lf

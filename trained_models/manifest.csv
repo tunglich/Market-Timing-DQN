@@ -1,0 +1,201 @@
+symbol,window,val_reward,source_folder,source_ckpt,dest,notes
+2330,55,42.1760,2330_55_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-42.176.data,trained_models/2330_all_55.data,
+2330,60,,,,trained_models/2330_all_60.data,MISSING legacy checkpoint
+2330,65,,,,trained_models/2330_all_65.data,MISSING legacy checkpoint
+2330,75,,,,trained_models/2330_all_75.data,MISSING legacy checkpoint
+2317,55,41.6980,2317_55_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-41.698.data,trained_models/2317_all_55.data,
+2317,60,,,,trained_models/2317_all_60.data,MISSING legacy checkpoint
+2317,65,,,,trained_models/2317_all_65.data,MISSING legacy checkpoint
+2317,75,,,,trained_models/2317_all_75.data,MISSING legacy checkpoint
+2454,55,26.1710,2454_55_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-26.171.data,trained_models/2454_all_55.data,
+2454,60,,,,trained_models/2454_all_60.data,MISSING legacy checkpoint
+2454,65,,,,trained_models/2454_all_65.data,MISSING legacy checkpoint
+2454,75,,,,trained_models/2454_all_75.data,MISSING legacy checkpoint
+2308,55,162.1840,2308_55_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-162.184.data,trained_models/2308_all_55.data,
+2308,60,,,,trained_models/2308_all_60.data,MISSING legacy checkpoint
+2308,65,,,,trained_models/2308_all_65.data,MISSING legacy checkpoint
+2308,75,,,,trained_models/2308_all_75.data,MISSING legacy checkpoint
+2303,55,39.8750,2303_55_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-39.875.data,trained_models/2303_all_55.data,
+2303,60,29.1550,2303_60_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-29.155.data,trained_models/2303_all_60.data,
+2303,65,51.6970,2303_65_val20240101_20260331_okohlcv_2h_novol_fpsfix2,best_val-51.697.data,trained_models/2303_all_65.data,
+2303,75,,,,trained_models/2303_all_75.data,MISSING legacy checkpoint
+2412,55,2.3870,2412_55_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-2.387.data,trained_models/2412_all_55.data,
+2412,60,,,,trained_models/2412_all_60.data,MISSING legacy checkpoint
+2412,65,,,,trained_models/2412_all_65.data,MISSING legacy checkpoint
+2412,75,,,,trained_models/2412_all_75.data,MISSING legacy checkpoint
+1303,55,73.9670,1303_55_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-73.967.data,trained_models/1303_all_55.data,
+1303,60,77.1950,1303_60_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-77.195.data,trained_models/1303_all_60.data,
+1303,65,93.2280,1303_65_val20240101_20260331_okohlcv_2h_novol_fpsfix2,best_val-93.228.data,trained_models/1303_all_65.data,
+1303,75,,,,trained_models/1303_all_75.data,MISSING legacy checkpoint
+2881,55,17.1070,2881_55_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-17.107.data,trained_models/2881_all_55.data,
+2881,60,22.2540,2881_60_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-22.254.data,trained_models/2881_all_60.data,
+2881,65,39.8140,2881_65_val20240101_20260331_okohlcv_2h_novol_fpsfix2,best_val-39.814.data,trained_models/2881_all_65.data,
+2881,75,,,,trained_models/2881_all_75.data,MISSING legacy checkpoint
+2891,55,36.1630,2891_55_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-36.163.data,trained_models/2891_all_55.data,
+2891,60,38.4490,2891_60_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-38.449.data,trained_models/2891_all_60.data,
+2891,65,24.3340,2891_65_val20240101_20260331_okohlcv_2h_novol_fpsfix2,best_val-24.334.data,trained_models/2891_all_65.data,
+2891,75,,,,trained_models/2891_all_75.data,MISSING legacy checkpoint
+2002,55,19.9920,2002_55_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-19.992.data,trained_models/2002_all_55.data,
+2002,60,23.4830,2002_60_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-23.483.data,trained_models/2002_all_60.data,
+2002,65,14.5190,2002_65_val20240101_20260331_okohlcv_2h_novol_fpsfix2,best_val-14.519.data,trained_models/2002_all_65.data,
+2002,75,,,,trained_models/2002_all_75.data,MISSING legacy checkpoint
+2882,55,21.5020,2882_55_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-21.502.data,trained_models/2882_all_55.data,
+2882,60,30.4840,2882_60_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-30.484.data,trained_models/2882_all_60.data,
+2882,65,31.0870,2882_65_val20240101_20260331_okohlcv_2h_novol_fpsfix2,best_val-31.087.data,trained_models/2882_all_65.data,
+2882,75,,,,trained_models/2882_all_75.data,MISSING legacy checkpoint
+3711,55,87.2710,3711_55_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-87.271.data,trained_models/3711_all_55.data,
+3711,60,116.3710,3711_60_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-116.371.data,trained_models/3711_all_60.data,
+3711,65,103.9820,3711_65_val20240101_20260331_okohlcv_2p5h_novol_fpsfix2,best_val-103.982.data,trained_models/3711_all_65.data,
+3711,75,,,,trained_models/3711_all_75.data,MISSING legacy checkpoint
+2886,55,4.7000,2886_55_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-4.700.data,trained_models/2886_all_55.data,
+2886,60,-0.1400,2886_60_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val--0.140.data,trained_models/2886_all_60.data,
+2886,65,14.3010,2886_65_val20240101_20260331_okohlcv_2p5h_novol_fpsfix2,best_val-14.301.data,trained_models/2886_all_65.data,
+2886,75,24.2030,2886_75_val20240101_20260331_okohlcv_2h_novol_fpsfix2,best_val-24.203.data,trained_models/2886_all_75.data,
+1301,55,36.1710,1301_55_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-36.171.data,trained_models/1301_all_55.data,
+1301,60,26.8270,1301_60_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-26.827.data,trained_models/1301_all_60.data,
+1301,65,69.0980,1301_65_val20240101_20260331_okohlcv_2h_novol_fpsfix2,best_val-69.098.data,trained_models/1301_all_65.data,
+1301,75,,,,trained_models/1301_all_75.data,MISSING legacy checkpoint
+1216,55,-0.9390,1216_55_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val--0.939.data,trained_models/1216_all_55.data,
+1216,60,-4.2900,1216_60_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val--4.290.data,trained_models/1216_all_60.data,
+1216,65,6.1380,1216_65_val20240101_20260331_okohlcv_2h_novol_fpsfix2,best_val-6.138.data,trained_models/1216_all_65.data,
+1216,75,,,,trained_models/1216_all_75.data,MISSING legacy checkpoint
+2884,55,15.1750,2884_55_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-15.175.data,trained_models/2884_all_55.data,
+2884,60,25.4650,2884_60_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-25.465.data,trained_models/2884_all_60.data,
+2884,65,25.5110,2884_65_val20240101_20260331_okohlcv_3h_novol_fpsfix2,best_val-25.511.data,trained_models/2884_all_65.data,
+2884,75,42.5610,2884_75_val20240101_20260331_okohlcv_3h_novol_fpsfix2,best_val-42.561.data,trained_models/2884_all_75.data,
+5871,55,12.8990,5871_55_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-12.899.data,trained_models/5871_all_55.data,
+5871,60,,,,trained_models/5871_all_60.data,MISSING legacy checkpoint
+5871,65,,,,trained_models/5871_all_65.data,MISSING legacy checkpoint
+5871,75,,,,trained_models/5871_all_75.data,MISSING legacy checkpoint
+2892,55,3.9730,2892_55_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-3.973.data,trained_models/2892_all_55.data,
+2892,60,,,,trained_models/2892_all_60.data,MISSING legacy checkpoint
+2892,65,,,,trained_models/2892_all_65.data,MISSING legacy checkpoint
+2892,75,,,,trained_models/2892_all_75.data,MISSING legacy checkpoint
+2885,55,32.3760,2885_55_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-32.376.data,trained_models/2885_all_55.data,
+2885,60,34.0440,2885_60_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-34.044.data,trained_models/2885_all_60.data,
+2885,65,45.0370,2885_65_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-45.037.data,trained_models/2885_all_65.data,
+2885,75,52.0520,2885_75_val20240101_20260331_okohlcv_3h_novol_fpsfix2,best_val-52.052.data,trained_models/2885_all_75.data,
+5880,55,-0.8590,5880_55_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val--0.859.data,trained_models/5880_all_55.data,
+5880,60,-1.0500,5880_60_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val--1.050.data,trained_models/5880_all_60.data,
+5880,65,7.3960,5880_65_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-7.396.data,trained_models/5880_all_65.data,
+5880,75,18.0340,5880_75_val20240101_20260331_okohlcv_2h_novol_fpsfix2,best_val-18.034.data,trained_models/5880_all_75.data,
+3034,55,2.6030,3034_55_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-2.603.data,trained_models/3034_all_55.data,
+3034,60,,,,trained_models/3034_all_60.data,MISSING legacy checkpoint
+3034,65,,,,trained_models/3034_all_65.data,MISSING legacy checkpoint
+3034,75,,,,trained_models/3034_all_75.data,MISSING legacy checkpoint
+3008,55,6.8380,3008_55_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-6.838.data,trained_models/3008_all_55.data,
+3008,60,,,,trained_models/3008_all_60.data,MISSING legacy checkpoint
+3008,65,,,,trained_models/3008_all_65.data,MISSING legacy checkpoint
+3008,75,,,,trained_models/3008_all_75.data,MISSING legacy checkpoint
+1101,55,3.6920,1101_55_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-3.692.data,trained_models/1101_all_55.data,
+1101,60,-8.0920,1101_60_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val--8.092.data,trained_models/1101_all_60.data,
+1101,65,-2.8480,1101_65_val20240101_20260331_okohlcv_2h_novol_fpsfix2,best_val--2.848.data,trained_models/1101_all_65.data,
+1101,75,35.1470,1101_75_val20240101_20260331_okohlcv_3h_novol,best_val-35.147.data,trained_models/1101_all_75.data,
+1326,55,42.6390,1326_55_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-42.639.data,trained_models/1326_all_55.data,
+1326,60,,,,trained_models/1326_all_60.data,MISSING legacy checkpoint
+1326,65,,,,trained_models/1326_all_65.data,MISSING legacy checkpoint
+1326,75,,,,trained_models/1326_all_75.data,MISSING legacy checkpoint
+2880,55,25.9670,2880_55_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-25.967.data,trained_models/2880_all_55.data,
+2880,60,29.2380,2880_60_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-29.238.data,trained_models/2880_all_60.data,
+2880,65,42.4470,2880_65_val20240101_20260331_okohlcv_3h_novol_fpsfix2,best_val-42.447.data,trained_models/2880_all_65.data,
+2880,75,50.1790,2880_75_val20240101_20260331_okohlcv_3h_novol_fpsfix2,best_val-50.179.data,trained_models/2880_all_75.data,
+2382,55,,,,trained_models/2382_all_55.data,MISSING legacy checkpoint
+2382,60,35.7500,2382_60_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-35.750.data,trained_models/2382_all_60.data,
+2382,65,59.3860,2382_65_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-59.386.data,trained_models/2382_all_65.data,
+2382,75,54.8050,2382_75_val20240101_20260331_okohlcv_2h_novol_fpsfix2,best_val-54.805.data,trained_models/2382_all_75.data,
+2327,55,,,,trained_models/2327_all_55.data,MISSING legacy checkpoint
+2327,60,,,,trained_models/2327_all_60.data,MISSING legacy checkpoint
+2327,65,,,,trained_models/2327_all_65.data,MISSING legacy checkpoint
+2327,75,,,,trained_models/2327_all_75.data,MISSING legacy checkpoint
+2883,55,,,,trained_models/2883_all_55.data,MISSING legacy checkpoint
+2883,60,19.3580,2883_60_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-19.358.data,trained_models/2883_all_60.data,
+2883,65,34.3730,2883_65_val20240101_20260331_okohlcv_3h_novol_fpsfix2,best_val-34.373.data,trained_models/2883_all_65.data,
+2883,75,45.6670,2883_75_val20240101_20260331_okohlcv_3h_novol_fpsfix2,best_val-45.667.data,trained_models/2883_all_75.data,
+2207,55,,,,trained_models/2207_all_55.data,MISSING legacy checkpoint
+2207,60,,,,trained_models/2207_all_60.data,MISSING legacy checkpoint
+2207,65,,,,trained_models/2207_all_65.data,MISSING legacy checkpoint
+2207,75,,,,trained_models/2207_all_75.data,MISSING legacy checkpoint
+2357,55,,,,trained_models/2357_all_55.data,MISSING legacy checkpoint
+2357,60,,,,trained_models/2357_all_60.data,MISSING legacy checkpoint
+2357,65,,,,trained_models/2357_all_65.data,MISSING legacy checkpoint
+2357,75,,,,trained_models/2357_all_75.data,MISSING legacy checkpoint
+2890,55,,,,trained_models/2890_all_55.data,MISSING legacy checkpoint
+2890,60,32.2050,2890_60_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-32.205.data,trained_models/2890_all_60.data,
+2890,65,41.1190,2890_65_val20240101_20260331_okohlcv_2p5h_novol_fpsfix2,best_val-41.119.data,trained_models/2890_all_65.data,
+2890,75,38.6830,2890_75_val20240101_20260331_okohlcv_3h_novol_fpsfix2,best_val-38.683.data,trained_models/2890_all_75.data,
+2379,55,,,,trained_models/2379_all_55.data,MISSING legacy checkpoint
+2379,60,,,,trained_models/2379_all_60.data,MISSING legacy checkpoint
+2379,65,,,,trained_models/2379_all_65.data,MISSING legacy checkpoint
+2379,75,,,,trained_models/2379_all_75.data,MISSING legacy checkpoint
+2887,55,,,,trained_models/2887_all_55.data,MISSING legacy checkpoint
+2887,60,35.4870,2887_60_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-35.487.data,trained_models/2887_all_60.data,
+2887,65,65.1170,2887_65_val20240101_20260331_okohlcv_2p5h_novol_fpsfix2,best_val-65.117.data,trained_models/2887_all_65.data,
+2887,75,63.7460,2887_75_val20240101_20260331_okohlcv_3h_novol_fpsfix2,best_val-63.746.data,trained_models/2887_all_75.data,
+2603,55,,,,trained_models/2603_all_55.data,MISSING legacy checkpoint
+2603,60,28.0180,2603_60_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-28.018.data,trained_models/2603_all_60.data,
+2603,65,27.7790,2603_65_val20240101_20260331_okohlcv_2h_novol_fpsfix2,best_val-27.779.data,trained_models/2603_all_65.data,
+2603,75,54.8810,2603_75_val20240101_20260331_okohlcv_3h_novol,best_val-54.881.data,trained_models/2603_all_75.data,
+3045,55,,,,trained_models/3045_all_55.data,MISSING legacy checkpoint
+3045,60,,,,trained_models/3045_all_60.data,MISSING legacy checkpoint
+3045,65,,,,trained_models/3045_all_65.data,MISSING legacy checkpoint
+3045,75,15.0040,3045_75_val20240101_20260331_okohlcv_2h_novol_fpsfix2,best_val-15.004.data,trained_models/3045_all_75.data,
+1590,55,,,,trained_models/1590_all_55.data,MISSING legacy checkpoint
+1590,60,,,,trained_models/1590_all_60.data,MISSING legacy checkpoint
+1590,65,,,,trained_models/1590_all_65.data,MISSING legacy checkpoint
+1590,75,,,,trained_models/1590_all_75.data,MISSING legacy checkpoint
+3037,55,,,,trained_models/3037_all_55.data,MISSING legacy checkpoint
+3037,60,,,,trained_models/3037_all_60.data,MISSING legacy checkpoint
+3037,65,,,,trained_models/3037_all_65.data,MISSING legacy checkpoint
+3037,75,,,,trained_models/3037_all_75.data,MISSING legacy checkpoint
+5876,55,,,,trained_models/5876_all_55.data,MISSING legacy checkpoint
+5876,60,,,,trained_models/5876_all_60.data,MISSING legacy checkpoint
+5876,65,,,,trained_models/5876_all_65.data,MISSING legacy checkpoint
+5876,75,,,,trained_models/5876_all_75.data,MISSING legacy checkpoint
+2912,55,,,,trained_models/2912_all_55.data,MISSING legacy checkpoint
+2912,60,,,,trained_models/2912_all_60.data,MISSING legacy checkpoint
+2912,65,,,,trained_models/2912_all_65.data,MISSING legacy checkpoint
+2912,75,,,,trained_models/2912_all_75.data,MISSING legacy checkpoint
+2395,55,,,,trained_models/2395_all_55.data,MISSING legacy checkpoint
+2395,60,,,,trained_models/2395_all_60.data,MISSING legacy checkpoint
+2395,65,,,,trained_models/2395_all_65.data,MISSING legacy checkpoint
+2395,75,,,,trained_models/2395_all_75.data,MISSING legacy checkpoint
+2801,55,,,,trained_models/2801_all_55.data,MISSING legacy checkpoint
+2801,60,23.2550,2801_60_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-23.255.data,trained_models/2801_all_60.data,
+2801,65,18.8920,2801_65_val20240101_20260331_okohlcv_3h_novol_fpsfix2,best_val-18.892.data,trained_models/2801_all_65.data,
+2801,75,32.3860,2801_75_val20240101_20260331_okohlcv_3h_novol_fpsfix2,best_val-32.386.data,trained_models/2801_all_75.data,
+4904,55,,,,trained_models/4904_all_55.data,MISSING legacy checkpoint
+4904,60,,,,trained_models/4904_all_60.data,MISSING legacy checkpoint
+4904,65,,,,trained_models/4904_all_65.data,MISSING legacy checkpoint
+4904,75,,,,trained_models/4904_all_75.data,MISSING legacy checkpoint
+6505,55,,,,trained_models/6505_all_55.data,MISSING legacy checkpoint
+6505,60,26.3640,6505_60_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-26.364.data,trained_models/6505_all_60.data,
+6505,65,42.7760,6505_65_val20240101_20260331_okohlcv_2h_novol_fpsfix2,best_val-42.776.data,trained_models/6505_all_65.data,
+6505,75,55.5500,6505_75_val20240101_20260331_okohlcv_3h_novol,best_val-55.550.data,trained_models/6505_all_75.data,
+4938,55,,,,trained_models/4938_all_55.data,MISSING legacy checkpoint
+4938,60,,,,trained_models/4938_all_60.data,MISSING legacy checkpoint
+4938,65,,,,trained_models/4938_all_65.data,MISSING legacy checkpoint
+4938,75,,,,trained_models/4938_all_75.data,MISSING legacy checkpoint
+2301,55,,,,trained_models/2301_all_55.data,MISSING legacy checkpoint
+2301,60,,,,trained_models/2301_all_60.data,MISSING legacy checkpoint
+2301,65,,,,trained_models/2301_all_65.data,MISSING legacy checkpoint
+2301,75,,,,trained_models/2301_all_75.data,MISSING legacy checkpoint
+2345,55,,,,trained_models/2345_all_55.data,MISSING legacy checkpoint
+2345,60,116.2000,2345_60_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-116.200.data,trained_models/2345_all_60.data,
+2345,65,136.1210,2345_65_val20240101_20260331_okohlcv_2p5h_novol_fpsfix2,best_val-136.121.data,trained_models/2345_all_65.data,
+2345,75,,,,trained_models/2345_all_75.data,MISSING legacy checkpoint
+3231,55,,,,trained_models/3231_all_55.data,MISSING legacy checkpoint
+3231,60,62.0680,3231_60_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-62.068.data,trained_models/3231_all_60.data,
+3231,65,44.9840,3231_65_val20240101_20260331_okohlcv_2h_novol_fpsfix2,best_val-44.984.data,trained_models/3231_all_65.data,
+3231,75,,,,trained_models/3231_all_75.data,MISSING legacy checkpoint
+6669,55,,,,trained_models/6669_all_55.data,MISSING legacy checkpoint
+6669,60,,,,trained_models/6669_all_60.data,MISSING legacy checkpoint
+6669,65,,,,trained_models/6669_all_65.data,MISSING legacy checkpoint
+6669,75,,,,trained_models/6669_all_75.data,MISSING legacy checkpoint
+9910,55,,,,trained_models/9910_all_55.data,MISSING legacy checkpoint
+9910,60,,,,trained_models/9910_all_60.data,MISSING legacy checkpoint
+9910,65,,,,trained_models/9910_all_65.data,MISSING legacy checkpoint
+9910,75,,,,trained_models/9910_all_75.data,MISSING legacy checkpoint
+2408,55,,,,trained_models/2408_all_55.data,MISSING legacy checkpoint
+2408,60,141.7300,2408_60_val20240101_20260331_okohlcv_1p5h_novol_fpsfix2,best_val-141.730.data,trained_models/2408_all_60.data,
+2408,65,224.2080,2408_65_val20240101_20260331_okohlcv_2h_novol_fpsfix2,best_val-224.208.data,trained_models/2408_all_65.data,
+2408,75,,,,trained_models/2408_all_75.data,MISSING legacy checkpoint
