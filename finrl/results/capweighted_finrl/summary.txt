@@ -1,0 +1,36 @@
+FinRL TW50 OOS Backtest - Variant E (Cap-Anchored + FinRL 8-indicators)
+Train period: 2006-01-09 ~ 2023-12-29
+Trade period: 2024-01-02 ~ 2026-03-31
+Stocks: 50
+Initial capital: NT$1,000,000
+Action: weights = softmax(log(cap_w) + action),  action in Box(+/-3.0)
+Training reward: portfolio_value * (1 - lambda_dev * Sigma((w-cap)^2)),  lambda_dev=0.5
+State: 252-day rolling cov_matrix (50x50) + indicators (['macd', 'boll_ub', 'boll_lb', 'rsi_30', 'cci_30', 'dx_30', 'close_30_sma', 'close_60_sma'] 8x50)
+Transaction cost: NOT MODELED (FinRL portfolio env limitation)
+CAP_BH: cap-weighted buy-and-hold using 2023-12-29 weights from tw50_2023-12-29.csv
+
+Final values & metrics:
+ agent     final_$  return_%  sharpe  max_dd_%
+   A2C 1545040.340    54.504   1.050   -27.124
+   PPO 2021430.119   102.143   1.508   -25.749
+  DDPG 2163208.135   116.321   1.525   -25.585
+   TD3 2400570.888   140.057   1.579   -28.781
+   SAC 2171939.929   117.194   1.572   -25.081
+   MVO 1216798.185    22.943   0.594   -22.983
+CAP_BH 2091574.992   109.157   1.483   -26.793
+  TWII 1821362.031    82.136   1.328   -28.693
+  0050 2191252.924   119.125   1.578   -28.474
+ A2C_D 1518591.165    51.859   1.267   -16.898
+ PPO_D 2017005.854   101.701   1.506   -25.777
+DDPG_D 1491637.528    49.164   1.106   -19.676
+ TD3_D 1523546.810    52.355   1.010   -22.752
+ SAC_D 2195983.524   119.598   1.585   -26.996
+
+Weight diagnostics (avg over backtest period):
+    agent   eff_n  max_w  avg_dev_to_cap  turnover
+      A2C 11.3607 0.1933          0.0816    0.0020
+      PPO  5.4765 0.4154          0.0000    0.0007
+     DDPG  3.0241 0.5657          0.0285    0.0010
+      TD3  2.5800 0.6123          0.0454    0.0012
+      SAC  3.5842 0.5181          0.0148    0.0008
+CAP (ref)  5.5341 0.4130          0.0000    0.0000
