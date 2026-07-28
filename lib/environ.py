@@ -48,7 +48,8 @@ class State:
         self.sharpe_eta = float(sharpe_eta)
         # Per-step penalty applied when agent is flat (no position).
         self.idle_penalty = float(idle_penalty)
-    # 設 offset 的目的在於讓每一回合的訓練可以從不同時間點做為起始，而不是從頭開始
+    # The `offset` argument lets each training episode start at a different
+    # timestep instead of always from the beginning of the series.
     def reset(self, prices, offset):
         assert isinstance(prices, data.Prices)  # named tuple
         assert offset >= self.bars_count-1

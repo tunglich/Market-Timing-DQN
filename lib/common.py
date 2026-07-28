@@ -29,14 +29,14 @@ class RewardTracker:
         self.reward_buf = []
         self.steps_buf = []
         self.group_rewards = group_rewards
-    # 當 with 開始時觸發
+    # Called when the `with` block starts.
     def __enter__(self):
         self.ts = time.time()
         self.ts_frame = 0
         self.total_rewards = []
         self.total_steps = []
         return self
-    # 當 with 結束時觸發
+    # Called when the `with` block exits.
     def __exit__(self, *args):
         self.writer.close()
 

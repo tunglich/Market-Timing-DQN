@@ -11,8 +11,6 @@ candlestick window. Framework: PyTorch + Gymnasium + [ptan](https://github.com/S
 - Validation scheme (new code): **5-fold contiguous walk-forward** on `2005-01 ~ 2023-12`.
 - Test window (held out): **`2024-01-02 ~ 2026-03-30`**.
 
-繁體中文摘要位於本文末段 [中文說明](#中文說明)。
-
 ---
 
 ## Layout
@@ -143,27 +141,3 @@ them with `<DES>` along the channel axis before the CNN.
 
 MIT — see [LICENSE](LICENSE).
 
----
-
-## 中文說明
-
-- **資料**：TW50 (2023-12-29 名單) 50 檔 × 4 個 window (55/60/65/75)。CSV 欄位為 `<DATE>,<DES>,<OPEN>,<HIGH>,<LOW>,<CLOSE>`，共 200 檔。
-- **模型**：1D-CNN DQN (`DQNConv1DLarge`) + PER + n-step return，動作空間為 `Skip / Buy / Close`。
-- **手續費 / 稅**：買 0.10 %、賣 0.34 %（含 0.30 % 證交稅）。
-- **驗證 (新程式)**：對 `2005-01 ~ 2023-12` 做 5 折連續 walk-forward，第 `k` 折用第 k 個 1/5 chunk 當 validation，其餘 4/5 當 training。
-- **測試 (保留區間)**：`2024-01-02 ~ 2026-03-30`，訓練與驗證時皆不會看到。
-- **重要提醒**：`trained_models/` 內的權重是用舊版方案訓練 (固定 train/val 切分，validation = 2024~2026)。用它做本 repo 的 `src/backtest.py` 只能當診斷上限，不是乾淨的泛化估計；如需公平比較，請用 `src/train_dqn.py` 重新訓練。
-- **模型覆蓋率**：200 個 (symbol, window) 目標中，只有 89 個舊 checkpoint；缺的以 `MISSING legacy checkpoint` 標註於 `trained_models/manifest.csv`。
-
-範例：
-
-```bash
-# 用 walk-forward 訓練 2330 window=75，5 折都跑，每折上限 1.5 小時
-python src/train_dqn.py --symbol 2330 --window 75 --fold all --hours 1.5
-
-# 用內建 trained_models 對 2024-01-02 ~ 2026-03-30 回測
-python src/backtest.py --symbol 2330 --window 75
-
-# 全 TW50 × 4 window 批次回測，輸出彙總 CSV
-python src/backtest.py --all --out backtest_summary.csv
-```
