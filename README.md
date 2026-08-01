@@ -53,13 +53,23 @@ candlestick window. Framework: PyTorch + Gymnasium + [ptan](https://github.com/S
                               per-symbol metrics
                               (model_pct vs BH,
                                50 syms × 4 windows)
+                                         │
+                                         ▼
+                    ┌──────────────────────────────────────┐
+                    │  src/portfolio_backtest.py           │  Aggregation
+                    │        (Stage 4, TW-50 only today)   │  equal / cap weights
+                    │                                      │  → portfolio_summary.csv
+                    │                                      │  → portfolio_timeseries.csv
+                    └──────────────────────────────────────┘
 ```
 
 Stage 1 runs once per `(symbol, window)` and produces the 5 fold CSVs.
 Stage 2 loops over the 5 folds, saving one `best_val-<reward>.data` per fold under
 `saves/<sym>_all_<win>/fold_<k>/`. Stage 3 loads a single checkpoint (either a
 shipped `trained_models/` file or a freshly trained one) and runs one
-deterministic rollout over the 2024-2026 test window.
+deterministic rollout over the 2024-2026 test window. Stage 4 replays every
+shipped checkpoint and aggregates the per-symbol P&L streams into a single
+portfolio equity curve under equal- or cap-weighting.
 
 ---
 
@@ -79,7 +89,8 @@ public_tw_dqn/
 ├── src/
 │   ├── walk_forward.py         # 5-fold contiguous CV over pre-test history
 │   ├── train_dqn.py            # PER + n-step DQN trainer (CNN, novol, TW costs)
-│   └── backtest.py             # Deterministic test 2024-01-02 ~ 2026-03-30
+│   ├── backtest.py             # Deterministic per-symbol test 2024-01-02 ~ 2026-03-30
+│   └── portfolio_backtest.py   # Aggregates DQN signals into equal/cap-weight portfolio
 ├── scripts/
 │   ├── export_top50_data.py    # Regenerates data/ from a private OHLCV source
 │   ├── import_legacy_models.py # Copies best pre-existing TW50 checkpoints
@@ -257,7 +268,37 @@ Useful `backtest.py` flags: `--commission-buy`, `--commission-sell`,
 `--bars`, `--epsilon` (defaults to 0.0 for a deterministic run), `--cpu`,
 `--models-dir`, `--data-dir`.
 
-### 3. Rebuild the price data (optional, private source required)
+### 3. Portfolio backtest (aggregate the per-symbol DQN signals)
+
+`src/portfolio_backtest.py` replays every shipped `<sym>_all_<W>.data`
+checkpoint over the same 2024-01-02 ~ 2026-03-30 test window, captures the
+environment's per-step P&L, and aggregates it into a single TW-50 portfolio
+equity curve. Two weighting variants are computed per window:
+
+* **equal** — `1/N` over every covered symbol.
+* **cap**   — TW-50 market-cap weights from `data/tw50_2023-12-29.csv`,
+              renormalised over the covered symbols.
+
+```powershell
+# all 4 windows, both schemes, TW-50
+python src/portfolio_backtest.py --cpu
+
+# only window 65 + 75, equal-weight only
+python src/portfolio_backtest.py --windows 65 75 --scheme equal --cpu
+```
+
+Outputs (repo root by default):
+
+* `portfolio_summary.csv` — one row per (window, scheme) with
+  `dqn_final_pct / dqn_sharpe / dqn_max_dd_pct / bh_final_pct / bh_sharpe /
+  bh_max_dd_pct / excess_pct`.
+* `portfolio_timeseries.csv` — daily equity curves for every
+  `dqn_<univ>_w<W>_<scheme>` and `bh_<univ>_w<W>_<scheme>` column.
+
+Cap-weight is only defined for `--universe tw50` today (Dow-30 needs an
+additional cap-weight file). Equal-weight works for both universes.
+
+### 4. Rebuild the price data (optional, private source required)
 
 ```powershell
 python scripts/export_top50_data.py --overwrite
@@ -282,6 +323,44 @@ data.
 
 These are diagnostic upper-bounds (see the next section), not the final
 paper numbers.
+
+### TW-50 portfolio numbers (`src/portfolio_backtest.py`, 2024-01-02 ~ 2026-03-30, TW retail costs 0.10 / 0.34%)
+
+| window | scheme | n | DQN final % | DQN Sharpe | DQN maxDD % | BH final % | BH Sharpe | BH maxDD % | excess % |
+|---:|:---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 55 | equal | 25 | +53.95  | 1.74 |  –11.86 | +40.48  | 0.98 | –23.47 | +13.48 |
+| 55 | cap   | 25 | +95.43  | 1.62 |  –22.22 | +126.90 | 1.68 | –25.32 | –31.46 |
+| 60 | equal | 25 | +70.33  | 2.30 |   –8.64 | +49.65  | 1.14 | –23.26 | +20.67 |
+| 60 | cap   | 25 | +67.76  | 2.11 |   –8.90 | +44.47  | 1.02 | –25.69 | +23.28 |
+| 65 | equal | 25 | +103.53 | 3.33 |   –6.64 | +49.65  | 1.14 | –23.26 | +53.88 |
+| 65 | cap   | 25 | +101.05 | 3.18 |   –6.55 | +44.47  | 1.02 | –25.69 | +56.58 |
+| 75 | equal | 14 | +99.69  | 4.07 |   –4.36 | +31.69  | 0.94 | –16.48 | +68.00 |
+| 75 | cap   | 14 | +103.84 | 3.86 |   –5.88 | +26.14  | 0.75 | –22.26 | +77.70 |
+
+Sharpe is annualised on 252 trading days; final % is compounded. `n` is the
+number of TW-50 symbols with a shipped checkpoint at that window (see
+[trained_models/manifest.csv](trained_models/manifest.csv) for missing rows).
+
+**Comparison with the FinRL SB3 variants** (from
+[finrl/results/capweighted_finrl_des75/summary.txt](finrl/results/capweighted_finrl_des75/summary.txt),
+covering 50 stocks with a portfolio-allocation agent instead of per-symbol
+timing, `2024-01-02 ~ 2026-03-31`, no transaction cost modelled):
+
+| Agent | final % | Sharpe | maxDD % |
+|---|---:|---:|---:|
+| A2C            | +143.42 | 1.66 | –26.47 |
+| PPO            | +101.74 | 1.51 | –25.78 |
+| DDPG           | +119.19 | 1.54 | –26.62 |
+| TD3            |  +37.17 | 0.86 | –23.22 |
+| SAC            |  +77.03 | 1.21 | –30.16 |
+| CAP\_BH (50)   | +109.16 | 1.48 | –26.79 |
+| TWII           |  +82.14 | 1.33 | –28.69 |
+| **DQN cap w=75** (this repo, 14 syms) | **+103.84** | **3.86** | **–5.88** |
+| **DQN eq w=75** (this repo, 14 syms)  | **+99.69**  | **4.07** | **–4.36** |
+
+The DQN portfolio's edge is on the risk axis (Sharpe 3.9–4.1 vs ≤ 1.7 for the
+SB3 variants and CAP\_BH; maxDD kept under 6% vs 23–30%). Absolute return is
+lower than A2C partly because DQN w=75 covers only 14 stocks vs 50.
 
 ## Important: code vs shipped checkpoints
 
