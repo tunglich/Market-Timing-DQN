@@ -1,0 +1,31 @@
+rank,ticker,name,sector
+1,AAPL,Apple,Information Technology
+2,AMGN,Amgen,Health Care
+3,AMZN,Amazon,Consumer Discretionary
+4,AXP,American Express,Financials
+5,BA,Boeing,Industrials
+6,CAT,Caterpillar,Industrials
+7,CRM,Salesforce,Information Technology
+8,CSCO,Cisco Systems,Information Technology
+9,CVX,Chevron,Energy
+10,DIS,Walt Disney,Communication Services
+11,GS,Goldman Sachs,Financials
+12,HD,Home Depot,Consumer Discretionary
+13,HON,Honeywell,Industrials
+14,IBM,IBM,Information Technology
+15,JNJ,Johnson & Johnson,Health Care
+16,JPM,JPMorgan Chase,Financials
+17,KO,Coca-Cola,Consumer Staples
+18,MCD,McDonald's,Consumer Discretionary
+19,MMM,3M,Industrials
+20,MRK,Merck,Health Care
+21,MSFT,Microsoft,Information Technology
+22,NKE,Nike,Consumer Discretionary
+23,NVDA,NVIDIA,Information Technology
+24,PG,Procter & Gamble,Consumer Staples
+25,SHW,Sherwin-Williams,Materials
+26,TRV,Travelers,Financials
+27,UNH,UnitedHealth Group,Health Care
+28,V,Visa,Financials
+29,VZ,Verizon Communications,Communication Services
+30,WMT,Walmart,Consumer Staples

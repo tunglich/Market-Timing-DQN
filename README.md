@@ -67,7 +67,8 @@ deterministic rollout over the 2024-2026 test window.
 
 ```
 public_tw_dqn/
-├── data/                       # 200 CSVs (50 syms × 4 windows) + tw50_2023-12-29.csv
+├── data/                       # TW50: 200 CSVs + tw50_2023-12-29.csv
+│                               # Dow30: 120 CSVs + dow30_constituents.csv
 │   └── <sym>_all_<win>.csv     # <DATE>,<DES>,<OPEN>,<HIGH>,<LOW>,<CLOSE>
 ├── lib/                        # Model / env / data helpers (verbatim from private repo)
 │   ├── data.py                 # CSV reader (auto-handles missing <VOLUME>)
@@ -81,13 +82,36 @@ public_tw_dqn/
 │   └── backtest.py             # Deterministic test 2024-01-02 ~ 2026-03-30
 ├── scripts/
 │   ├── export_top50_data.py    # Regenerates data/ from a private OHLCV source
-│   └── import_legacy_models.py # Copies best pre-existing checkpoints into trained_models/
-├── trained_models/             # 89 legacy checkpoints (LFS) + manifest.csv
+│   ├── import_legacy_models.py # Copies best pre-existing TW50 checkpoints
+│   └── import_dow30_models.py  # Same, but for the Dow30 universe
+├── trained_models/             # 89 TW50 + 90 Dow30 checkpoints (LFS)
+│                               # + manifest.csv, manifest_dow30.csv
 ├── requirements.txt
 ├── LICENSE  (MIT)
 ├── .gitattributes  (LFS: trained_models/**/*.data)
 └── .gitignore
 ```
+
+## Universes
+
+Two constituent universes ship with the repository. All code paths
+(`train_dqn.py`, `backtest.py`, the CNN in `lib/models.py`) are identical
+across universes — only the CSV lists and the shipped checkpoints differ.
+
+| Universe | Constituent list | CSVs | Shipped checkpoints | Windows shipped |
+|---|---|---|---|---|
+| `tw50` (default) | `data/tw50_2023-12-29.csv` (50 syms) | 200 | 89 | 55, 60, 65, 75 (partial) |
+| `dow30` | `data/dow30_constituents.csv` (30 syms, post-Nov-2024 lineup) | 120 | 90 | 60, 65, 75 (55 not shipped) |
+
+Select the universe for batch backtests with `--universe`:
+
+```powershell
+python src/backtest.py --universe tw50  --all --out backtest_summary.csv
+python src/backtest.py --universe dow30 --all --out backtest_summary_dow30.csv
+```
+
+Single-symbol runs (`--symbol AAPL --window 75`) auto-detect the CSV; no flag
+needed.
 
 ## Install
 
@@ -215,8 +239,14 @@ python src/backtest.py --symbol 2330 --window 55
 # override the checkpoint (e.g. a freshly trained fold)
 python src/backtest.py --symbol 2330 --window 75 --model saves\2330_all_75\fold_0\best_val-64.770.data
 
-# batch over every shipped checkpoint (89 of the 200 sym × window pairs)
+# batch over every shipped TW50 checkpoint (89 of 200 sym × window pairs)
 python src/backtest.py --all --out backtest_summary.csv
+
+# batch over the Dow30 universe (90 of 120 sym × window pairs; window 55 not shipped)
+python src/backtest.py --universe dow30 --all --out backtest_summary_dow30.csv
+
+# single Dow30 symbol
+python src/backtest.py --symbol AAPL --window 75
 ```
 
 The batch command writes `backtest_summary.csv` with columns
@@ -246,6 +276,8 @@ data.
 |---|---|
 | `python src/backtest.py --symbol 2330 --window 55 --cpu` | `model=+86.42%  BH=+206.37%  excess=-119.94%  rows=539  buys=267 closes=68` |
 | `python src/backtest.py --all --out backtest_summary.csv --cpu` | 89 rows written, `Mean model_pct=+59.20%  Mean bh_pct=+41.79%  Mean excess=+17.41%` |
+| `python src/backtest.py --symbol AAPL --window 75 --cpu` | `model=+80.62%  BH=+32.71%  excess=+47.91%  rows=562  buys=135 closes=229` |
+| `python src/backtest.py --universe dow30 --all --out backtest_summary_dow30.csv --cpu` | 90 rows written, `Mean model_pct=+64.40%  Mean bh_pct=+41.25%  Mean excess=+23.15%` (window 60/65/75 excess = +2.45 / +18.48 / +48.51) |
 | `python src/train_dqn.py --symbol 2330 --window 75 --fold 0 --hours 0.02 --n-envs 1 --cpu` | best val reward reaches ~65 after ~3.8k frames; checkpoint saved under `saves/2330_all_75/fold_0/` |
 
 These are diagnostic upper-bounds (see the next section), not the final

@@ -8,8 +8,10 @@ Reports:
 
 Usage:
     python src/backtest.py --symbol 2330 --window 75
+    python src/backtest.py --symbol AAPL --window 75
     python src/backtest.py --symbol 2330 --window 75 --model trained_models/2330_all_75.data
-    python src/backtest.py --all --out backtest_summary.csv
+    python src/backtest.py --all --out backtest_summary.csv                   # TW50 (default)
+    python src/backtest.py --all --universe dow30 --out backtest_dow30.csv    # Dow 30
 """
 from __future__ import annotations
 
@@ -114,14 +116,27 @@ def run_backtest(model_path: Path, test_csv: Path,
     }
 
 
-def load_top50_symbols(data_dir: Path) -> list[str]:
-    cons = data_dir / "tw50_2023-12-29.csv"
+UNIVERSE_FILES = {
+    "tw50": "tw50_2023-12-29.csv",
+    "dow30": "dow30_constituents.csv",
+}
+UNIVERSE_EXPECTED_COUNT = {"tw50": 50, "dow30": 30}
+
+
+def load_universe_symbols(universe: str, data_dir: Path) -> list[str]:
+    if universe not in UNIVERSE_FILES:
+        raise SystemExit(f"unknown universe {universe!r}; choose from {sorted(UNIVERSE_FILES)}")
+    cons = data_dir / UNIVERSE_FILES[universe]
     if not cons.is_file():
         raise SystemExit(f"missing constituent list: {cons}")
     with cons.open("r", encoding="utf-8-sig", newline="") as f:
         reader = csv.reader(f)
         next(reader)
-        return [row[1].strip() for row in reader if row and row[0].strip().isdigit()]
+        syms = [row[1].strip() for row in reader if row and row[0].strip().isdigit()]
+    expected = UNIVERSE_EXPECTED_COUNT[universe]
+    if len(syms) != expected:
+        raise SystemExit(f"{cons}: expected {expected} symbols, got {len(syms)}")
+    return syms
 
 
 def resolve_model_path(models_dir: Path, symbol: str, window: int) -> Path:
@@ -135,7 +150,10 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--symbol")
     ap.add_argument("--window", type=int, choices=WINDOWS)
-    ap.add_argument("--all", action="store_true", help="Backtest every TW50 sym x window")
+    ap.add_argument("--universe", choices=sorted(UNIVERSE_FILES), default="tw50",
+                    help="Constituent universe for --all (default: tw50)")
+    ap.add_argument("--all", action="store_true",
+                    help="Backtest every symbol x window in the selected universe")
     ap.add_argument("--model", type=Path, default=None, help="Override checkpoint path")
     ap.add_argument("--models-dir", type=Path, default=REPO_ROOT / "trained_models")
     ap.add_argument("--data-dir", type=Path, default=REPO_ROOT / "data")
@@ -152,7 +170,7 @@ def main() -> int:
 
     jobs: list[tuple[str, int]] = []
     if args.all:
-        for sym in load_top50_symbols(args.data_dir):
+        for sym in load_universe_symbols(args.universe, args.data_dir):
             for w in WINDOWS:
                 jobs.append((sym, w))
     else:

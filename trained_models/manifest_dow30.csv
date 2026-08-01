@@ -1,0 +1,121 @@
+symbol,window,val_reward,source_folder,source_ckpt,dest,notes
+AAPL,55,,,,trained_models/AAPL_all_55.data,MISSING legacy checkpoint
+AAPL,60,18.9040,AAPL_60_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_dow15_b1_20260523_221053,best_val-18.904.data,trained_models/AAPL_all_60.data,
+AAPL,65,42.9810,AAPL_65_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b1_20260523_112756,best_val-42.981.data,trained_models/AAPL_all_65.data,
+AAPL,75,45.8010,AAPL_75_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b1_20260522_221821,best_val-45.801.data,trained_models/AAPL_all_75.data,
+AMGN,55,,,,trained_models/AMGN_all_55.data,MISSING legacy checkpoint
+AMGN,60,17.4780,AMGN_60_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_dow15_b1_20260523_221053,best_val-17.478.data,trained_models/AMGN_all_60.data,
+AMGN,65,40.1570,AMGN_65_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b1_20260523_112756,best_val-40.157.data,trained_models/AMGN_all_65.data,
+AMGN,75,64.3320,AMGN_75_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b1_20260522_221821,best_val-64.332.data,trained_models/AMGN_all_75.data,
+AMZN,55,,,,trained_models/AMZN_all_55.data,MISSING legacy checkpoint
+AMZN,60,21.8220,AMZN_60_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_dow15_b1_20260523_221053,best_val-21.822.data,trained_models/AMZN_all_60.data,
+AMZN,65,25.1480,AMZN_65_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b1_20260523_112756,best_val-25.148.data,trained_models/AMZN_all_65.data,
+AMZN,75,61.1560,AMZN_75_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b1_20260522_221821,best_val-61.156.data,trained_models/AMZN_all_75.data,
+AXP,55,,,,trained_models/AXP_all_55.data,MISSING legacy checkpoint
+AXP,60,30.7390,AXP_60_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_dow15_b1_20260523_221053,best_val-30.739.data,trained_models/AXP_all_60.data,
+AXP,65,40.3890,AXP_65_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b1_20260523_112756,best_val-40.389.data,trained_models/AXP_all_65.data,
+AXP,75,54.5350,AXP_75_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b1_20260522_221821,best_val-54.535.data,trained_models/AXP_all_75.data,
+BA,55,,,,trained_models/BA_all_55.data,MISSING legacy checkpoint
+BA,60,39.8630,BA_60_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_dow15_b2_20260523_221053,best_val-39.863.data,trained_models/BA_all_60.data,
+BA,65,31.0910,BA_65_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b2_20260523_112756,best_val-31.091.data,trained_models/BA_all_65.data,
+BA,75,64.1550,BA_75_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b2_20260522_221821,best_val-64.155.data,trained_models/BA_all_75.data,
+CAT,55,,,,trained_models/CAT_all_55.data,MISSING legacy checkpoint
+CAT,60,66.2620,CAT_60_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_dow15_b2_20260523_221053,best_val-66.262.data,trained_models/CAT_all_60.data,
+CAT,65,64.4970,CAT_65_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b2_20260523_112756,best_val-64.497.data,trained_models/CAT_all_65.data,
+CAT,75,95.1050,CAT_75_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b2_20260522_221821,best_val-95.105.data,trained_models/CAT_all_75.data,
+CRM,55,,,,trained_models/CRM_all_55.data,MISSING legacy checkpoint
+CRM,60,-0.9670,CRM_all60_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val--0.967.data,trained_models/CRM_all_60.data,
+CRM,65,10.7820,CRM_all65_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-10.782.data,trained_models/CRM_all_65.data,
+CRM,75,53.3110,CRM_all75_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-53.311.data,trained_models/CRM_all_75.data,
+CSCO,55,,,,trained_models/CSCO_all_55.data,MISSING legacy checkpoint
+CSCO,60,34.9490,CSCO_60_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_dow15_b2_20260523_221053,best_val-34.949.data,trained_models/CSCO_all_60.data,
+CSCO,65,45.6000,CSCO_65_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b2_20260523_112756,best_val-45.600.data,trained_models/CSCO_all_65.data,
+CSCO,75,41.1350,CSCO_75_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b2_20260522_221821,best_val-41.135.data,trained_models/CSCO_all_75.data,
+CVX,55,,,,trained_models/CVX_all_55.data,MISSING legacy checkpoint
+CVX,60,41.1700,CVX_60_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_dow15_b3_20260523_221053,best_val-41.170.data,trained_models/CVX_all_60.data,
+CVX,65,55.4580,CVX_65_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b3_20260523_112756,best_val-55.458.data,trained_models/CVX_all_65.data,
+CVX,75,61.7660,CVX_75_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b3_20260522_221821,best_val-61.766.data,trained_models/CVX_all_75.data,
+DIS,55,,,,trained_models/DIS_all_55.data,MISSING legacy checkpoint
+DIS,60,18.7450,DIS_all60_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-18.745.data,trained_models/DIS_all_60.data,
+DIS,65,25.9800,DIS_65_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b3_20260523_112756,best_val-25.980.data,trained_models/DIS_all_65.data,
+DIS,75,45.0780,DIS_all75_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-45.078.data,trained_models/DIS_all_75.data,
+GS,55,,,,trained_models/GS_all_55.data,MISSING legacy checkpoint
+GS,60,33.6780,GS_60_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_dow15_b3_20260523_221053,best_val-33.678.data,trained_models/GS_all_60.data,
+GS,65,49.6430,GS_65_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b3_20260523_112756,best_val-49.643.data,trained_models/GS_all_65.data,
+GS,75,75.3980,GS_75_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b3_20260522_221821,best_val-75.398.data,trained_models/GS_all_75.data,
+HD,55,,,,trained_models/HD_all_55.data,MISSING legacy checkpoint
+HD,60,11.3100,HD_60_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_dow15_b3_20260523_221053,best_val-11.310.data,trained_models/HD_all_60.data,
+HD,65,15.1750,HD_65_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b3_20260523_112756,best_val-15.175.data,trained_models/HD_all_65.data,
+HD,75,28.8320,HD_75_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b3_20260522_221821,best_val-28.832.data,trained_models/HD_all_75.data,
+HON,55,,,,trained_models/HON_all_55.data,MISSING legacy checkpoint
+HON,60,15.7140,HON_60_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_dow15_b4_20260523_221053,best_val-15.714.data,trained_models/HON_all_60.data,
+HON,65,27.0930,HON_65_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b4_20260523_112756,best_val-27.093.data,trained_models/HON_all_65.data,
+HON,75,44.7500,HON_75_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b4_20260522_221821,best_val-44.750.data,trained_models/HON_all_75.data,
+IBM,55,,,,trained_models/IBM_all_55.data,MISSING legacy checkpoint
+IBM,60,15.9150,IBM_60_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_dow15_b4_20260523_221053,best_val-15.915.data,trained_models/IBM_all_60.data,
+IBM,65,36.8800,IBM_65_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b4_20260523_112756,best_val-36.880.data,trained_models/IBM_all_65.data,
+IBM,75,63.8730,IBM_75_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b4_20260522_221821,best_val-63.873.data,trained_models/IBM_all_75.data,
+JNJ,55,,,,trained_models/JNJ_all_55.data,MISSING legacy checkpoint
+JNJ,60,40.2990,JNJ_60_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_dow15_b4_20260523_221053,best_val-40.299.data,trained_models/JNJ_all_60.data,
+JNJ,65,47.4870,JNJ_65_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b4_20260523_112756,best_val-47.487.data,trained_models/JNJ_all_65.data,
+JNJ,75,46.3300,JNJ_75_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b4_20260522_221821,best_val-46.330.data,trained_models/JNJ_all_75.data,
+JPM,55,,,,trained_models/JPM_all_55.data,MISSING legacy checkpoint
+JPM,60,46.4790,JPM_60_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_b1_20260524_104353,best_val-46.479.data,trained_models/JPM_all_60.data,
+JPM,65,47.1940,JPM_65_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b4_20260523_112756,best_val-47.194.data,trained_models/JPM_all_65.data,
+JPM,75,53.8650,JPM_75_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_traindata16_b4_20260522_221821,best_val-53.865.data,trained_models/JPM_all_75.data,
+KO,55,,,,trained_models/KO_all_55.data,MISSING legacy checkpoint
+KO,60,19.0030,KO_60_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_b1_20260524_080321,best_val-19.003.data,trained_models/KO_all_60.data,
+KO,65,18.0680,KO_65_v8_gpu_b10_novol_val202401_20260330_2h_dynbeta_b1_20260524_080321,best_val-18.068.data,trained_models/KO_all_65.data,
+KO,75,31.8400,KO_75_v8_gpu_b10_novol_val202401_20260330_1p5h_dynbeta_20260524,best_val-31.840.data,trained_models/KO_all_75.data,
+MCD,55,,,,trained_models/MCD_all_55.data,MISSING legacy checkpoint
+MCD,60,14.7160,MCD_all60_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-14.716.data,trained_models/MCD_all_60.data,
+MCD,65,17.6430,MCD_all65_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-17.643.data,trained_models/MCD_all_65.data,
+MCD,75,36.4380,MCD_all75_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-36.438.data,trained_models/MCD_all_75.data,
+MMM,55,,,,trained_models/MMM_all_55.data,MISSING legacy checkpoint
+MMM,60,27.8680,MMM_all60_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-27.868.data,trained_models/MMM_all_60.data,
+MMM,65,28.3850,MMM_all65_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-28.385.data,trained_models/MMM_all_65.data,
+MMM,75,58.5770,MMM_all75_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-58.577.data,trained_models/MMM_all_75.data,
+MRK,55,,,,trained_models/MRK_all_55.data,MISSING legacy checkpoint
+MRK,60,33.7640,MRK_all60_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-33.764.data,trained_models/MRK_all_60.data,
+MRK,65,49.4900,MRK_all65_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-49.490.data,trained_models/MRK_all_65.data,
+MRK,75,54.7260,MRK_all75_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-54.726.data,trained_models/MRK_all_75.data,
+MSFT,55,,,,trained_models/MSFT_all_55.data,MISSING legacy checkpoint
+MSFT,60,0.9660,MSFT_all60_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-0.966.data,trained_models/MSFT_all_60.data,
+MSFT,65,5.2810,MSFT_all65_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-5.281.data,trained_models/MSFT_all_65.data,
+MSFT,75,35.3230,MSFT_all75_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-35.323.data,trained_models/MSFT_all_75.data,
+NKE,55,,,,trained_models/NKE_all_55.data,MISSING legacy checkpoint
+NKE,60,5.7210,NKE_all60_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-5.721.data,trained_models/NKE_all_60.data,
+NKE,65,14.1500,NKE_all65_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-14.150.data,trained_models/NKE_all_65.data,
+NKE,75,46.3180,NKE_all75_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-46.318.data,trained_models/NKE_all_75.data,
+NVDA,55,,,,trained_models/NVDA_all_55.data,MISSING legacy checkpoint
+NVDA,60,51.6650,NVDA_all60_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-51.665.data,trained_models/NVDA_all_60.data,
+NVDA,65,78.9320,NVDA_all65_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-78.932.data,trained_models/NVDA_all_65.data,
+NVDA,75,112.8370,NVDA_all75_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-112.837.data,trained_models/NVDA_all_75.data,
+PG,55,,,,trained_models/PG_all_55.data,MISSING legacy checkpoint
+PG,60,2.3760,PG_all60_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-2.376.data,trained_models/PG_all_60.data,
+PG,65,9.0230,PG_all65_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-9.023.data,trained_models/PG_all_65.data,
+PG,75,20.4270,PG_all75_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-20.427.data,trained_models/PG_all_75.data,
+SHW,55,,,,trained_models/SHW_all_55.data,MISSING legacy checkpoint
+SHW,60,12.2070,SHW_all60_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-12.207.data,trained_models/SHW_all_60.data,
+SHW,65,23.9970,SHW_all65_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-23.997.data,trained_models/SHW_all_65.data,
+SHW,75,32.9590,SHW_all75_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-32.959.data,trained_models/SHW_all_75.data,
+TRV,55,,,,trained_models/TRV_all_55.data,MISSING legacy checkpoint
+TRV,60,29.6370,TRV_all60_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-29.637.data,trained_models/TRV_all_60.data,
+TRV,65,29.3520,TRV_all65_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-29.352.data,trained_models/TRV_all_65.data,
+TRV,75,48.2340,TRV_all75_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-48.234.data,trained_models/TRV_all_75.data,
+UNH,55,,,,trained_models/UNH_all_55.data,MISSING legacy checkpoint
+UNH,60,31.9720,UNH_all60_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-31.972.data,trained_models/UNH_all_60.data,
+UNH,65,52.5470,UNH_all65_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-52.547.data,trained_models/UNH_all_65.data,
+UNH,75,51.3530,UNH_all75_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-51.353.data,trained_models/UNH_all_75.data,
+V,55,,,,trained_models/V_all_55.data,MISSING legacy checkpoint
+V,60,11.6570,V_all60_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-11.657.data,trained_models/V_all_60.data,
+V,65,9.5290,V_all65_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-9.529.data,trained_models/V_all_65.data,
+V,75,22.4100,V_all75_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-22.410.data,trained_models/V_all_75.data,
+VZ,55,,,,trained_models/VZ_all_55.data,MISSING legacy checkpoint
+VZ,60,35.5650,VZ_all60_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-35.565.data,trained_models/VZ_all_60.data,
+VZ,65,43.1780,VZ_all65_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-43.178.data,trained_models/VZ_all_65.data,
+VZ,75,43.6600,VZ_all75_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-43.660.data,trained_models/VZ_all_75.data,
+WMT,55,,,,trained_models/WMT_all_55.data,MISSING legacy checkpoint
+WMT,60,41.9810,WMT_all60_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-41.981.data,trained_models/WMT_all_60.data,
+WMT,65,53.5740,WMT_all65_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-53.574.data,trained_models/WMT_all_65.data,
+WMT,75,56.7660,WMT_all75_val20240101_20260330_okohlcv_2h_dynbeta_novol_dowlast15,best_val-56.766.data,trained_models/WMT_all_75.data,
