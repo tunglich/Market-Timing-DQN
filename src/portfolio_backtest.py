@@ -64,6 +64,27 @@ def load_cap_weights(universe: str, data_dir: Path) -> dict[str, float]:
     return weights
 
 
+def load_price_weights(universe: str, data_dir: Path) -> dict[str, float]:
+    """Return ``{symbol: reference_close_price}`` for the paper's price-weighted
+    Dow-30 scheme (§3.4). Reference date is 2023-12-29 (test-window inception)."""
+    if universe != "dow30":
+        raise SystemExit(f"price weights only defined for universe=dow30, got {universe!r}")
+    path = data_dir / "dow30_price_weights_2023-12-29.csv"
+    if not path.is_file():
+        raise SystemExit(f"missing price-weight file: {path}")
+    weights: dict[str, float] = {}
+    with path.open("r", encoding="utf-8-sig", newline="") as f:
+        reader = csv.reader(f)
+        next(reader)
+        for row in reader:
+            if not row or not row[0].strip().isdigit():
+                continue
+            weights[row[1].strip()] = float(row[2])
+    if len(weights) != UNIVERSE_EXPECTED_COUNT[universe]:
+        raise SystemExit(f"{path}: parsed {len(weights)} rows, expected {UNIVERSE_EXPECTED_COUNT[universe]}")
+    return weights
+
+
 def replay_policy_rewards(model_path: Path, test_csv_tmp: Path,
                           commission_buy: float, commission_sell: float,
                           bars_count: int, device: str) -> np.ndarray:
@@ -170,7 +191,9 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--universe", choices=sorted(UNIVERSE_FILES), default="tw50")
     ap.add_argument("--windows", type=int, nargs="+", choices=WINDOWS, default=list(WINDOWS))
-    ap.add_argument("--scheme", choices=("equal", "cap", "both"), default="both")
+    ap.add_argument("--scheme", choices=("equal", "cap", "price", "both"), default="both",
+                    help="Weighting scheme. 'both' expands to (equal, cap) for tw50 "
+                         "and (equal, price) for dow30.")
     ap.add_argument("--models-dir", type=Path, default=REPO_ROOT / "trained_models")
     ap.add_argument("--data-dir", type=Path, default=REPO_ROOT / "data")
     ap.add_argument("--tmp-dir", type=Path, default=REPO_ROOT / "saves" / "_backtest_tmp")
@@ -185,17 +208,29 @@ def main() -> int:
     args = ap.parse_args()
 
     if args.scheme == "cap" and args.universe != "tw50":
-        raise SystemExit(f"--scheme cap is only supported for universe=tw50 currently")
+        raise SystemExit("--scheme cap is only supported for universe=tw50")
+    if args.scheme == "price" and args.universe != "dow30":
+        raise SystemExit("--scheme price is only supported for universe=dow30")
 
     device = "cuda" if (not args.cpu and torch.cuda.is_available()) else "cpu"
     symbols = load_universe_symbols(args.universe, args.data_dir)
     cap_raw = load_cap_weights(args.universe, args.data_dir) if args.universe == "tw50" else None
+    price_raw = load_price_weights(args.universe, args.data_dir) if args.universe == "dow30" else None
 
     schemes: list[str]
     if args.scheme == "both":
-        schemes = ["equal", "cap"] if args.universe == "tw50" else ["equal"]
+        schemes = ["equal", "cap"] if args.universe == "tw50" else ["equal", "price"]
     else:
         schemes = [args.scheme]
+
+    def scheme_weights(scheme: str) -> dict[str, float] | None:
+        if scheme == "equal":
+            return None
+        if scheme == "cap":
+            return cap_raw
+        if scheme == "price":
+            return price_raw
+        raise SystemExit(f"unknown scheme {scheme!r}")
 
     all_equity_curves: dict[str, pd.Series] = {}
     summary_rows: list[dict] = []
@@ -228,7 +263,7 @@ def main() -> int:
         print(f"[window={w}] symbols_used={n_used}  skipped={len(skipped)}")
 
         for scheme in schemes:
-            weights = None if scheme == "equal" else cap_raw
+            weights = scheme_weights(scheme)
             dqn_daily = aggregate_portfolio(dqn_by_sym, weights)
             bh_daily = aggregate_portfolio(bh_by_sym, weights)
             dqn_eq = (1.0 + dqn_daily / 100.0).cumprod()

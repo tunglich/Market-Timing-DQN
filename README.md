@@ -90,11 +90,17 @@ public_tw_dqn/
 │   ├── walk_forward.py         # 5-fold contiguous CV over pre-test history
 │   ├── train_dqn.py            # PER + n-step DQN trainer (CNN, novol, TW costs)
 │   ├── backtest.py             # Deterministic per-symbol test 2024-01-02 ~ 2026-03-30
-│   └── portfolio_backtest.py   # Aggregates DQN signals into equal/cap-weight portfolio
+│   └── portfolio_backtest.py   # Aggregates DQN signals into equal/cap/price portfolio
 ├── scripts/
 │   ├── export_top50_data.py    # Regenerates data/ from a private OHLCV source
 │   ├── import_legacy_models.py # Copies best pre-existing TW50 checkpoints
-│   └── import_dow30_models.py  # Same, but for the Dow30 universe
+│   ├── import_dow30_models.py  # Same, but for the Dow30 universe
+│   ├── gen_des_by_accuracy.py  # Independent-flip DES generator (Eq. 2)
+│   ├── gen_des_clustered.py    # Clustered-error DES generator (Eq. 5)
+│   ├── accuracy_to_metrics.py  # Directional accuracy -> F1 / AUC (Eq. 6)
+│   └── break_even_cost.py      # Extra bp/side that would erase the excess return
+├── data/
+│   └── dow30_price_weights_2023-12-29.csv  # Dow-30 price-weight reference prices
 ├── trained_models/             # 89 TW50 + 90 Dow30 checkpoints (LFS)
 │                               # + manifest.csv, manifest_dow30.csv
 ├── requirements.txt
@@ -278,13 +284,22 @@ equity curve. Two weighting variants are computed per window:
 * **equal** — `1/N` over every covered symbol.
 * **cap**   — TW-50 market-cap weights from `data/tw50_2023-12-29.csv`,
               renormalised over the covered symbols.
+* **price** — Dow-30 price weights (Dow Jones Industrial Average convention)
+              built from the 2023-12-29 close of every constituent, shipped
+              as `data/dow30_price_weights_2023-12-29.csv` and renormalised
+              over the covered symbols.
 
 ```powershell
-# all 4 windows, both schemes, TW-50
+# TW-50: all 4 windows, both schemes (equal + cap)
 python src/portfolio_backtest.py --cpu
 
-# only window 65 + 75, equal-weight only
+# TW-50 window 65 + 75, equal only
 python src/portfolio_backtest.py --windows 65 75 --scheme equal --cpu
+
+# Dow-30: all 4 windows, both schemes (equal + price)
+python src/portfolio_backtest.py --universe dow30 --cpu `
+    --out-summary portfolio_summary_dow30.csv `
+    --out-timeseries portfolio_timeseries_dow30.csv
 ```
 
 Outputs (repo root by default):
@@ -295,8 +310,9 @@ Outputs (repo root by default):
 * `portfolio_timeseries.csv` — daily equity curves for every
   `dqn_<univ>_w<W>_<scheme>` and `bh_<univ>_w<W>_<scheme>` column.
 
-Cap-weight is only defined for `--universe tw50` today (Dow-30 needs an
-additional cap-weight file). Equal-weight works for both universes.
+Cap-weight is defined for `--universe tw50`; price-weight is defined for
+`--universe dow30`. Equal-weight works for both. `--scheme both` expands to
+`(equal, cap)` on TW-50 and `(equal, price)` on Dow-30.
 
 ### 4. Rebuild the price data (optional, private source required)
 
@@ -361,6 +377,76 @@ timing, `2024-01-02 ~ 2026-03-31`, no transaction cost modelled):
 The DQN portfolio's edge is on the risk axis (Sharpe 3.9–4.1 vs ≤ 1.7 for the
 SB3 variants and CAP\_BH; maxDD kept under 6% vs 23–30%). Absolute return is
 lower than A2C partly because DQN w=75 covers only 14 stocks vs 50.
+
+### Dow-30 portfolio numbers (`src/portfolio_backtest.py --universe dow30`, 2024-01-02 ~ 2026-03-30, US retail costs 0.05 / 0.05%)
+
+| window | scheme | n | DQN final % | DQN Sharpe | DQN maxDD % | BH final % | BH Sharpe | BH maxDD % | excess % |
+|---:|:---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 60 | equal | 30 |  +53.49 | 2.28 |  –5.97 | +39.05 | 1.18 | –15.41 | +14.44 |
+| 60 | price | 30 |  +47.42 | 2.00 |  –6.23 | +26.67 | 0.83 | –15.01 | +20.76 |
+| 65 | equal | 30 |  +80.50 | 3.55 |  –3.35 | +39.05 | 1.18 | –15.41 | +41.45 |
+| 65 | price | 30 |  +77.43 | 3.27 |  –4.25 | +26.67 | 0.83 | –15.01 | +50.76 |
+| 75 | equal | 30 | +143.85 | 5.75 |  –2.10 | +39.05 | 1.18 | –15.41 | +104.79 |
+| 75 | price | 30 | +138.50 | 5.45 |  –2.14 | +26.67 | 0.83 | –15.01 | +111.83 |
+
+Window 55 is skipped (no Dow-30 checkpoints at that window). The
+price-weighted BH benchmark is materially harder to beat because a handful of
+high-price constituents (SHW, UNH, MSFT, GS) drag the DJIA-style index; the
+DQN portfolio still delivers +50 to +112 pp of excess return over it.
+
+## Paper-driven add-ons
+
+Utilities that reproduce the methodology-specific numbers from the SC-DQN
+paper without needing to retrain any checkpoint.
+
+**Clustered directional-error DES (Eq. 5).** Replaces the independent-flip
+label noise model (`scripts/gen_des_by_accuracy.py`, Eq. 2) with an AR(1)
+idiosyncratic component plus a shared cross-sectional stress factor, so that
+mislabels concentrate in high-volatility regimes:
+
+```powershell
+python scripts/gen_des_clustered.py --universe tw50 --accuracy 65 `
+    --beta 0.5 --phi 0.3 --seed 42
+python scripts/gen_des_clustered.py --universe dow30 --accuracy 65 `
+    --beta 0.5 --phi 0.3 --seed 42
+```
+
+`beta=phi=0` recovers the independent baseline. Output goes to
+`data/clustered_b<BB>_p<PP>/<sym>_all_<acc>.csv` with the same schema as the
+existing DES files, so downstream training is unchanged.
+
+**Directional accuracy → F1 / AUC (Eq. 6).** Closed-form mapping that lets a
+practitioner screen a candidate binary classifier against a target trading
+edge before running a full backtest:
+
+```powershell
+python scripts/accuracy_to_metrics.py --accuracy 0.65 --base-rate 0.53
+# accuracy rho = 0.650   AUC = 0.650   F1 = 0.663   (matches paper Table 2)
+
+python scripts/accuracy_to_metrics.py --grid --out reports/accuracy_map.csv
+```
+
+**Break-even round-trip friction (Table 3).** Given any
+`backtest_summary*.csv` and its matching `portfolio_summary*.csv`, reports
+the extra bp per side that would erase the portfolio's excess return over
+buy-and-hold:
+
+```powershell
+python scripts/break_even_cost.py `
+    --backtest-summary backtest_summary_dow30.csv `
+    --portfolio-summary portfolio_summary_dow30.csv `
+    --out reports/break_even_dow30.csv
+```
+
+Verified output (2026-07 build):
+
+| universe | window | scheme | excess bp | sides/stock | break-even bp/side |
+|---|---:|:---:|---:|---:|---:|
+| dow30 | 60 | equal |  1443.7 | 340.5 |   4.24 |
+| dow30 | 65 | equal |  4144.6 | 344.2 |  12.04 |
+| dow30 | 65 | price |  5075.9 | 344.2 |  14.75 |
+| dow30 | 75 | equal | 10479.3 | 329.4 |  31.81 |
+| dow30 | 75 | price | 11183.2 | 329.4 |  33.95 |
 
 ## Important: code vs shipped checkpoints
 

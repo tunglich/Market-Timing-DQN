@@ -33,6 +33,10 @@ optuna_v8.db
 backtest_*/
 rewards-*.png
 
+# Paper-driven add-on artefacts (regenerate via scripts/)
+data/clustered_*/
+reports/
+
 # Temp
 *.tmp
 *.bak
