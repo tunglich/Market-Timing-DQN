@@ -9,13 +9,14 @@ Mirrors ``scripts/gen_des_by_accuracy.py`` but:
   (DES **last**, unlike the TW50 files which have DES second).
 
 Ground-truth ``y`` and noisy ``<DES>`` follow the same rules as the TW50
-generator: ``y[i] = 1`` iff mean(next 20 closes) >= today's close (partial
-mean for the tail; ``y = 0`` for the very last row).
+generator: ``y[i] = 1`` iff mean(next ``h`` closes) >= today's close (partial
+mean for the tail; ``y = 0`` for the very last row). The horizon ``h`` is
+selectable from ``{5, 10, 20, 60}`` via ``--horizon`` (default 20).
 
 Usage:
-    python scripts/gen_des_by_accuracy_us.py --ticker V --accuracy 75 --seed 42
+    python scripts/gen_des_by_accuracy_us.py --ticker V --accuracy 75 --horizon 20 --seed 42
     # or generate all four accuracies at once:
-    python scripts/gen_des_by_accuracy_us.py --ticker V --accuracies 55 60 65 75
+    python scripts/gen_des_by_accuracy_us.py --ticker V --accuracies 55 60 65 75 --horizon 20
 """
 
 from __future__ import annotations
@@ -28,7 +29,8 @@ import numpy as np
 import pandas as pd
 import yfinance as yf
 
-FUTURE_WINDOW = 20
+FUTURE_WINDOW = 20  # default horizon (days), overridable via --horizon
+HORIZON_CHOICES = (5, 10, 20, 60)
 OUTPUT_COLUMNS = ["<DATE>", "<OPEN>", "<HIGH>", "<LOW>", "<CLOSE>", "<VOLUME>", "<DES>"]
 
 DEFAULT_START = "2005-01-03"
@@ -90,8 +92,10 @@ def noisy_labels(y: np.ndarray, accuracy: int, rng: np.random.Generator) -> np.n
     return np.where(keep, y, 1 - y).astype(int)
 
 
-def build_dataframe(ohlcv: pd.DataFrame, accuracy: int, seed: int) -> pd.DataFrame:
-    y = compute_y(ohlcv["<CLOSE>"])
+def build_dataframe(
+    ohlcv: pd.DataFrame, accuracy: int, seed: int, horizon: int = FUTURE_WINDOW,
+) -> pd.DataFrame:
+    y = compute_y(ohlcv["<CLOSE>"], window=horizon)
     rng = np.random.default_rng(seed)
     des = noisy_labels(y, accuracy, rng)
     return pd.DataFrame(
@@ -116,6 +120,14 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--accuracies", type=int, nargs="+", default=None,
                    help="Multiple accuracy targets, e.g. --accuracies 55 60 65 75.")
     p.add_argument("--seed", type=int, default=42, help="RNG seed (default 42).")
+    p.add_argument(
+        "--horizon",
+        type=int,
+        default=FUTURE_WINDOW,
+        choices=HORIZON_CHOICES,
+        help=f"Forecast horizon h in trading days (default {FUTURE_WINDOW}); "
+             f"choices: {HORIZON_CHOICES}",
+    )
     p.add_argument("--start", default=DEFAULT_START, help=f"Download start (default {DEFAULT_START}).")
     p.add_argument("--end", default=DEFAULT_END,
                    help=f"Download end EXCLUSIVE (default {DEFAULT_END}).")
@@ -140,15 +152,17 @@ def main() -> None:
     print(f"  got {len(ohlcv)} rows, {ohlcv.index[0].date()} .. {ohlcv.index[-1].date()}")
 
     for a in accs:
-        df = build_dataframe(ohlcv, a, args.seed)
+        df = build_dataframe(ohlcv, a, args.seed, horizon=args.horizon)
         out_path = args.out_dir / f"{args.ticker}_all_{a}.csv"
         df.to_csv(out_path, index=False)
         # Report actual DES-vs-y agreement rate.
         y = compute_y(pd.Series(df["<CLOSE>"].to_numpy(),
-                                index=pd.to_datetime(df["<DATE>"])))
+                                index=pd.to_datetime(df["<DATE>"])),
+                      window=args.horizon)
         match_rate = float((df["<DES>"].to_numpy() == y).mean())
         print(f"Wrote {out_path} ({len(df)} rows)  "
-              f"target={a}%  actual DES-vs-y agreement={match_rate * 100:.2f}%")
+              f"target={a}%  h={args.horizon}  "
+              f"actual DES-vs-y agreement={match_rate * 100:.2f}%")
 
 
 if __name__ == "__main__":

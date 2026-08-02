@@ -1,15 +1,24 @@
 # TW50 DQN — Public Benchmark
 
 Deep Q-Network (DQN, 1D-CNN) applied to Taiwan Top-50 (TW50, 2023-12-29
-constituent list) stocks, trading a single symbol at a time on a fixed
-candlestick window. Framework: PyTorch + Gymnasium + [ptan](https://github.com/Shmuma/ptan).
+constituent list) stocks, trading a single symbol at a time under a
+preset directional-signal accuracy.
+Framework: PyTorch + Gymnasium + [ptan](https://github.com/Shmuma/ptan).
 
 - Input features per bar: `<DES>, <OPEN>, <HIGH>, <LOW>, <CLOSE>` (no volume, no sentiment).
 - Actions: `Skip / Buy / Close` (long-only single position, no leverage).
 - Commissions (TW retail defaults): **buy 0.10 %** / **sell 0.34 %** (0.14 % broker fee tier + 0.30 % securities transaction tax already baked into sell).
-- Windows shipped: `55`, `60`, `65`, `75` bars.
+- Accuracies shipped: `55 %`, `60 %`, `65 %`, `75 %` (target directional accuracy `ρ` of the `<DES>` signal).
 - Validation scheme (new code): **5-fold contiguous walk-forward** on `2005-01 ~ 2023-12`.
 - Test window (held out): **`2024-01-02 ~ 2026-03-30`**.
+
+> **Naming convention (legacy).** Throughout the code and CLI, the numbers
+> `55 / 60 / 65 / 75` are exposed as `--window` and appear in filenames as
+> `<sym>_all_<win>.csv` and `saves/<sym>_all_<win>/`. This is a legacy
+> holdover; the current interpretation is the **target directional accuracy
+> `ρ` (in %)** of the `<DES>` signal, matching the accuracy grid in the paper.
+> Existing users can keep passing `--window 75` as before; new prose in this
+> README uses `ρ` / "accuracy" for clarity.
 
 ---
 
@@ -17,15 +26,24 @@ candlestick window. Framework: PyTorch + Gymnasium + [ptan](https://github.com/S
 
 ```
                     ┌──────────────────────────────────────┐
-                    │  data/<sym>_all_<win>.csv            │  50 syms × 4 windows (55/60/65/75)
-                    │  <DATE>,<DES>,<OPEN>,<HIGH>,<LOW>,   │  <DES> = binary directional label
-                    │  <CLOSE>                             │  from an external encoder
+                    │  Raw OHLCV                           │  TW50: data/{Open,High,Low,Close,
+                    │                                      │       Volume}.csv (wide matrix)
+                    │                                      │  Dow30: yfinance auto_adjust=True
                     └────────────────────┬─────────────────┘
                                          │
                                          ▼
                     ┌──────────────────────────────────────┐
+                    │  scripts/gen_des_by_accuracy*.py     │  y[i]=1 iff mean(close[i+1..i+h])
+                    │        (Stage 1: make features)      │        >= close[i]      (h∈{5,10,20,60})
+                    │  --accuracy ρ  --horizon h  --seed   │  DES = y w.p. ρ/100, else 1-y
+                    │  (or gen_des_clustered.py, Eq. 5)    │  Per-row independent flip (Eq. 2)
+                    └────────────────────┬─────────────────┘  → data/<sym>_all_<ρ>.csv
+                                         │                    <DATE>,<DES>,<OPEN>,<HIGH>,
+                                         │                    <LOW>,<CLOSE>[,<VOLUME>]
+                                         ▼
+                    ┌──────────────────────────────────────┐
                     │  src/walk_forward.py                 │  Trim to date < 2024-01-01
-                    │        (Stage 1)                     │  Drop leading zero-OHLC rows
+                    │        (Stage 2)                     │  Drop leading zero-OHLC rows
                     │                                      │  Split into 5 contiguous chunks
                     └────────────────────┬─────────────────┘  Emit fold_k_train / fold_k_val CSVs
                                          │
@@ -33,17 +51,17 @@ candlestick window. Framework: PyTorch + Gymnasium + [ptan](https://github.com/S
                                          ▼
                     ┌──────────────────────────────────────┐
                     │  src/train_dqn.py                    │  StocksEnv (Skip/Buy/Close)
-                    │        (Stage 2)                     │  1-D CNN (DQNConv1DLarge)
+                    │        (Stage 3)                     │  1-D CNN (DQNConv1DLarge)
                     │                                      │  PER + n-step (n=2) Double DQN
                     │                                      │  buy 0.10 % / sell 0.34 %
                     │                                      │  Adaptive ε / β schedule
                     └────────────────────┬─────────────────┘  Best val ckpt per fold
                                          │
-                                         │   pick best-val ckpt  (or use trained_models/<sym>_all_<win>.data)
+                                         │   pick best-val ckpt  (or use trained_models/<sym>_all_<ρ>.data)
                                          ▼
                     ┌──────────────────────────────────────┐
                     │  src/backtest.py                     │  Held-out test
-                    │        (Stage 3)                     │  2024-01-02 ~ 2026-03-30
+                    │        (Stage 4)                     │  2024-01-02 ~ 2026-03-30
                     │                                      │  Deterministic ε=0 greedy rollout
                     │                                      │  Reports model_pct, bh_pct,
                     │                                      │  excess_pct, n_buy / n_close
@@ -52,24 +70,32 @@ candlestick window. Framework: PyTorch + Gymnasium + [ptan](https://github.com/S
                                          ▼
                               per-symbol metrics
                               (model_pct vs BH,
-                               50 syms × 4 windows)
+                               50 syms × 4 accuracies)
                                          │
                                          ▼
                     ┌──────────────────────────────────────┐
                     │  src/portfolio_backtest.py           │  Aggregation
-                    │        (Stage 4, TW-50 only today)   │  equal / cap weights
+                    │        (Stage 5)                     │  equal / cap (TW-50)
+                    │                                      │  equal / price (Dow-30)
                     │                                      │  → portfolio_summary.csv
                     │                                      │  → portfolio_timeseries.csv
                     └──────────────────────────────────────┘
 ```
 
-Stage 1 runs once per `(symbol, window)` and produces the 5 fold CSVs.
-Stage 2 loops over the 5 folds, saving one `best_val-<reward>.data` per fold under
-`saves/<sym>_all_<win>/fold_<k>/`. Stage 3 loads a single checkpoint (either a
-shipped `trained_models/` file or a freshly trained one) and runs one
-deterministic rollout over the 2024-2026 test window. Stage 4 replays every
+**Stage 1 (make features)** takes raw OHLCV plus two knobs — target accuracy
+`ρ ∈ [50, 100]` and forecast horizon `h ∈ {5, 10, 20, 60}` — and emits one
+`data/<sym>_all_<ρ>.csv` per symbol whose `<DES>` column agrees with the
+ground-truth `h`-day directional label with probability `ρ/100`. `h=20` and
+`ρ ∈ {55, 60, 65, 75}` reproduce the shipped CSVs.
+
+Stage 2 runs once per `(symbol, accuracy)` and produces the 5 fold CSVs.
+Stage 3 loops over the 5 folds, saving one `best_val-<reward>.data` per fold
+under `saves/<sym>_all_<ρ>/fold_<k>/`. Stage 4 loads a single checkpoint
+(either a shipped `trained_models/` file or a freshly trained one) and runs one
+deterministic rollout over the 2024-2026 test window. Stage 5 replays every
 shipped checkpoint and aggregates the per-symbol P&L streams into a single
-portfolio equity curve under equal- or cap-weighting.
+portfolio equity curve under equal / cap (TW-50) or equal / price (Dow-30)
+weighting.
 
 ---
 
@@ -115,9 +141,9 @@ Two constituent universes ship with the repository. All code paths
 (`train_dqn.py`, `backtest.py`, the CNN in `lib/models.py`) are identical
 across universes — only the CSV lists and the shipped checkpoints differ.
 
-| Universe | Constituent list | CSVs | Shipped checkpoints | Windows shipped |
+| Universe | Constituent list | CSVs | Shipped checkpoints | Accuracies shipped |
 |---|---|---|---|---|
-| `tw50` (default) | `data/tw50_2023-12-29.csv` (50 syms) | 200 | 89 | 55, 60, 65, 75 (partial) |
+| `tw50` (default) | `data/tw50_2023-12-29.csv` (50 syms) | 200 | 89 | 55 %, 60 %, 65 %, 75 % (partial) |
 | `dow30` | `data/dow30_constituents.csv` (30 syms, post-Nov-2024 lineup) | 120 | 90 | 60, 65, 75 (55 not shipped) |
 
 Select the universe for batch backtests with `--universe`:
@@ -201,7 +227,7 @@ Expected observations:
 
 ## Usage (full workflow)
 
-### 1. Train one symbol × window with 5-fold walk-forward
+### 1. Train one symbol × accuracy with 5-fold walk-forward
 
 ```powershell
 # all 5 folds, 1.5 h wall clock per fold (default)
@@ -250,16 +276,16 @@ Useful `train_dqn.py` flags:
 ### 2. Backtest on the held-out test window (2024-01-02 ~ 2026-03-30)
 
 ```powershell
-# single symbol × window against the shipped checkpoint in trained_models/
+# single symbol × accuracy against the shipped checkpoint in trained_models/
 python src/backtest.py --symbol 2330 --window 55
 
 # override the checkpoint (e.g. a freshly trained fold)
 python src/backtest.py --symbol 2330 --window 75 --model saves\2330_all_75\fold_0\best_val-64.770.data
 
-# batch over every shipped TW50 checkpoint (89 of 200 sym × window pairs)
+# batch over every shipped TW50 checkpoint (89 of 200 sym × accuracy pairs)
 python src/backtest.py --all --out backtest_summary.csv
 
-# batch over the Dow30 universe (90 of 120 sym × window pairs; window 55 not shipped)
+# batch over the Dow30 universe (90 of 120 sym × accuracy pairs; accuracy 55 % not shipped)
 python src/backtest.py --universe dow30 --all --out backtest_summary_dow30.csv
 
 # single Dow30 symbol
@@ -279,7 +305,7 @@ Useful `backtest.py` flags: `--commission-buy`, `--commission-sell`,
 `src/portfolio_backtest.py` replays every shipped `<sym>_all_<W>.data`
 checkpoint over the same 2024-01-02 ~ 2026-03-30 test window, captures the
 environment's per-step P&L, and aggregates it into a single TW-50 portfolio
-equity curve. Two weighting variants are computed per window:
+equity curve. Two weighting variants are computed per accuracy:
 
 * **equal** — `1/N` over every covered symbol.
 * **cap**   — TW-50 market-cap weights from `data/tw50_2023-12-29.csv`,
@@ -290,13 +316,13 @@ equity curve. Two weighting variants are computed per window:
               over the covered symbols.
 
 ```powershell
-# TW-50: all 4 windows, both schemes (equal + cap)
+# TW-50: all 4 accuracies, both schemes (equal + cap)
 python src/portfolio_backtest.py --cpu
 
-# TW-50 window 65 + 75, equal only
+# TW-50 accuracy 65 % + 75 %, equal only
 python src/portfolio_backtest.py --windows 65 75 --scheme equal --cpu
 
-# Dow-30: all 4 windows, both schemes (equal + price)
+# Dow-30: all 4 accuracies, both schemes (equal + price)
 python src/portfolio_backtest.py --universe dow30 --cpu `
     --out-summary portfolio_summary_dow30.csv `
     --out-timeseries portfolio_timeseries_dow30.csv
@@ -334,7 +360,7 @@ data.
 | `python src/backtest.py --symbol 2330 --window 55 --cpu` | `model=+86.42%  BH=+206.37%  excess=-119.94%  rows=539  buys=267 closes=68` |
 | `python src/backtest.py --all --out backtest_summary.csv --cpu` | 89 rows written, `Mean model_pct=+59.20%  Mean bh_pct=+41.79%  Mean excess=+17.41%` |
 | `python src/backtest.py --symbol AAPL --window 75 --cpu` | `model=+80.62%  BH=+32.71%  excess=+47.91%  rows=562  buys=135 closes=229` |
-| `python src/backtest.py --universe dow30 --all --out backtest_summary_dow30.csv --cpu` | 90 rows written, `Mean model_pct=+64.40%  Mean bh_pct=+41.25%  Mean excess=+23.15%` (window 60/65/75 excess = +2.45 / +18.48 / +48.51) |
+| `python src/backtest.py --universe dow30 --all --out backtest_summary_dow30.csv --cpu` | 90 rows written, `Mean model_pct=+64.40%  Mean bh_pct=+41.25%  Mean excess=+23.15%` (accuracy 60/65/75 % excess = +2.45 / +18.48 / +48.51) |
 | `python src/train_dqn.py --symbol 2330 --window 75 --fold 0 --hours 0.02 --n-envs 1 --cpu` | best val reward reaches ~65 after ~3.8k frames; checkpoint saved under `saves/2330_all_75/fold_0/` |
 
 These are diagnostic upper-bounds (see the next section), not the final
@@ -354,7 +380,7 @@ paper numbers.
 | 75 | cap   | 14 | +103.84 | 3.86 |   –5.88 | +26.14  | 0.75 | –22.26 | +77.70 |
 
 Sharpe is annualised on 252 trading days; final % is compounded. `n` is the
-number of TW-50 symbols with a shipped checkpoint at that window (see
+number of TW-50 symbols with a shipped checkpoint at that accuracy (see
 [trained_models/manifest.csv](trained_models/manifest.csv) for missing rows).
 
 **Comparison with the FinRL SB3 variants** (from
@@ -389,7 +415,7 @@ lower than A2C partly because DQN w=75 covers only 14 stocks vs 50.
 | 75 | equal | 30 | +143.85 | 5.75 |  –2.10 | +39.05 | 1.18 | –15.41 | +104.79 |
 | 75 | price | 30 | +138.50 | 5.45 |  –2.14 | +26.67 | 0.83 | –15.01 | +111.83 |
 
-Window 55 is skipped (no Dow-30 checkpoints at that window). The
+Accuracy 55 % is skipped (no Dow-30 checkpoints at that accuracy). The
 price-weighted BH benchmark is materially harder to beat because a handful of
 high-price constituents (SHW, UNH, MSFT, GS) drag the DJIA-style index; the
 DQN portfolio still delivers +50 to +112 pp of excess return over it.
@@ -465,7 +491,7 @@ upper-bound diagnostic, not a clean generalisation estimate. To reproduce
 clean numbers, retrain with `src/train_dqn.py` and then run `src/backtest.py`
 against the newly saved checkpoints.
 
-Coverage note: only **89 of the 200** (sym × window) legacy checkpoints exist
+Coverage note: only **89 of the 200** (sym × accuracy) legacy checkpoints exist
 in the source repo. Missing pairs are listed in
 `trained_models/manifest.csv` with `notes = "MISSING legacy checkpoint"`.
 

@@ -6,15 +6,16 @@ matching the format of existing files such as ``data/1101_all_60.csv``.
 
 - OHLCV is loaded from wide-format matrices ``data/{Open,High,Low,Close,Volume}.csv``
   (rows = date, columns = ticker symbols).
-- Ground-truth label ``y`` is 1 iff the mean of the *next* 20 trading days'
+- Ground-truth label ``y`` is 1 iff the mean of the *next* ``h`` trading days'
   ``<CLOSE>`` is >= today's ``<CLOSE>``; otherwise 0. For the very last row
-  (no future data) ``y = 0``. Tail rows with fewer than 20 remaining days use
-  the partial mean.
+  (no future data) ``y = 0``. Tail rows with fewer than ``h`` remaining days
+  use the partial mean. The horizon ``h`` is selectable from ``{5, 10, 20, 60}``
+  via ``--horizon`` (default 20).
 - ``<DES>`` is a noisy version of ``y`` with the given accuracy: each row keeps
   ``y`` with probability ``accuracy/100`` and flips to ``1 - y`` otherwise.
 
 Usage:
-    python scripts/gen_des_by_accuracy.py --ticker 1101 --accuracy 60 --seed 42
+    python scripts/gen_des_by_accuracy.py --ticker 1101 --accuracy 60 --horizon 20 --seed 42
 """
 
 from __future__ import annotations
@@ -33,7 +34,8 @@ OHLCV_FILES = {
     "<CLOSE>": "Close.csv",
     "<VOLUME>": "Volume.csv",
 }
-FUTURE_WINDOW = 20
+FUTURE_WINDOW = 20  # default horizon (days), overridable via --horizon
+HORIZON_CHOICES = (5, 10, 20, 60)
 OUTPUT_COLUMNS = ["<DATE>", "<DES>", "<OPEN>", "<HIGH>", "<LOW>", "<CLOSE>", "<VOLUME>"]
 
 
@@ -91,9 +93,11 @@ def noisy_labels(y: np.ndarray, accuracy: int, rng: np.random.Generator) -> np.n
     return des
 
 
-def build_dataframe(ticker: str, accuracy: int, seed: int, data_dir: Path) -> pd.DataFrame:
+def build_dataframe(
+    ticker: str, accuracy: int, seed: int, data_dir: Path, horizon: int = FUTURE_WINDOW,
+) -> pd.DataFrame:
     ohlcv = load_ohlcv(ticker, data_dir)
-    y = compute_y(ohlcv["<CLOSE>"])
+    y = compute_y(ohlcv["<CLOSE>"], window=horizon)
     rng = np.random.default_rng(seed)
     des = noisy_labels(y, accuracy, rng)
 
@@ -123,6 +127,14 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--seed", type=int, default=42, help="RNG seed (default 42)")
     parser.add_argument(
+        "--horizon",
+        type=int,
+        default=FUTURE_WINDOW,
+        choices=HORIZON_CHOICES,
+        help=f"Forecast horizon h in trading days (default {FUTURE_WINDOW}); "
+             f"choices: {HORIZON_CHOICES}",
+    )
+    parser.add_argument(
         "--data-dir",
         type=Path,
         default=Path("data"),
@@ -147,19 +159,22 @@ def main() -> None:
     out_dir = args.out_dir if args.out_dir is not None else args.data_dir
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    df = build_dataframe(args.ticker, args.accuracy, args.seed, args.data_dir)
+    df = build_dataframe(
+        args.ticker, args.accuracy, args.seed, args.data_dir, horizon=args.horizon,
+    )
     out_path = out_dir / f"{args.ticker}_all_{args.accuracy}.csv"
     df.to_csv(out_path, index=False)
 
     # Report an agreement rate as a sanity check.
     y = compute_y(
-        pd.Series(df["<CLOSE>"].to_numpy(), index=pd.to_datetime(df["<DATE>"]))
+        pd.Series(df["<CLOSE>"].to_numpy(), index=pd.to_datetime(df["<DATE>"])),
+        window=args.horizon,
     )
     match_rate = float((df["<DES>"].to_numpy() == y).mean())
     print(f"Wrote {out_path} ({len(df)} rows)")
     print(
-        f"Target accuracy = {args.accuracy}%, actual DES vs y agreement = "
-        f"{match_rate * 100:.2f}%"
+        f"Target accuracy = {args.accuracy}%, horizon h = {args.horizon}, "
+        f"actual DES vs y agreement = {match_rate * 100:.2f}%"
     )
 
 

@@ -43,7 +43,8 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 def _norm_ppf(p):
     """Vectorised inverse standard-normal CDF via ``scipy.stats.norm.ppf``."""
     return norm.ppf(np.asarray(p, dtype=float))
-FUTURE_WINDOW = 20
+FUTURE_WINDOW = 20  # default horizon (days), overridable via --horizon
+HORIZON_CHOICES = (5, 10, 20, 60)
 OUTPUT_COLUMNS = ["<DATE>", "<DES>", "<OPEN>", "<HIGH>", "<LOW>", "<CLOSE>", "<VOLUME>"]
 
 UNIVERSE_FILES = {"tw50": "tw50_2023-12-29.csv", "dow30": "dow30_constituents.csv"}
@@ -134,11 +135,13 @@ def build_flip_matrix(index: pd.DatetimeIndex, s: pd.Series, symbols: list[str],
 
 
 def build_and_write(sym: str, close_col: pd.Series, ohlcv_path: Path,
-                    flip_col: pd.Series, out_dir: Path, accuracy: int) -> tuple[float, int]:
+                    flip_col: pd.Series, out_dir: Path, accuracy: int,
+                    horizon: int = FUTURE_WINDOW) -> tuple[float, int]:
     df_full = pd.read_csv(ohlcv_path)
     df_full["<DATE>"] = pd.to_datetime(df_full["<DATE>"])
     y = compute_y(pd.Series(df_full["<CLOSE>"].astype(float).to_numpy(),
-                            index=df_full["<DATE>"]))
+                            index=df_full["<DATE>"]),
+                  window=horizon)
     flip_aligned = flip_col.reindex(df_full["<DATE>"]).fillna(False).to_numpy().astype(bool)
     des = np.where(flip_aligned, 1 - y, y).astype(int)
     df_out = pd.DataFrame({
@@ -171,6 +174,14 @@ def main() -> int:
     ap.add_argument("--out-dir", type=Path, default=None,
                     help="Defaults to data/clustered_b<BB>_p<PP>/")
     ap.add_argument("--stress-window", type=int, default=20)
+    ap.add_argument(
+        "--horizon",
+        type=int,
+        default=FUTURE_WINDOW,
+        choices=HORIZON_CHOICES,
+        help=f"Forecast horizon h in trading days (default {FUTURE_WINDOW}); "
+             f"choices: {HORIZON_CHOICES}",
+    )
     args = ap.parse_args()
     if not (50 <= args.accuracy <= 100):
         raise SystemExit(f"--accuracy must be in [50, 100], got {args.accuracy}")
@@ -198,11 +209,13 @@ def main() -> int:
             # Fall back to the 75%-accuracy file for the OHLCV columns.
             ohlcv_path = args.data_dir / f"{sym}_all_75.csv"
         agree, n = build_and_write(sym, close[sym], ohlcv_path, flip[sym],
-                                   args.out_dir, args.accuracy)
+                                   args.out_dir, args.accuracy,
+                                   horizon=args.horizon)
         agreements.append(agree)
     print(f"Wrote {len(symbols)} files under {args.out_dir}")
     print(f"per-symbol DES-vs-y agreement: mean={100 * np.mean(agreements):.2f}%  "
-          f"min={100 * np.min(agreements):.2f}%  max={100 * np.max(agreements):.2f}%")
+          f"min={100 * np.min(agreements):.2f}%  max={100 * np.max(agreements):.2f}%  "
+          f"horizon h={args.horizon}")
     return 0
 
 
