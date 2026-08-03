@@ -38,10 +38,10 @@ def load_manifest(path: Path) -> list[dict[str, str]]:
 def load_tw50_symbols(path: Path) -> list[str]:
     with path.open(encoding="utf-8-sig") as fh:
         rows = list(csv.DictReader(fh))
-    # header uses Chinese: 股票代號
+    # header column is 'symbol' (English) after the CSV was translated
     out: list[str] = []
     for r in rows:
-        sym = (r.get("股票代號") or r.get("symbol") or "").strip()
+        sym = (r.get("symbol") or "").strip()
         if sym and sym.isdigit():
             out.append(sym)
     return out
@@ -143,7 +143,7 @@ def render(
 
     lines.append("## Known omissions (documented, not bugs)\n")
     lines.append(
-        "- **TW50 symbol 2150 (崇越電)**: cited in the paper narrative but not "
+        "- **TW50 symbol 2150 (Chong Yueh Electronics)**: cited in the paper narrative but not "
         "present in `data/tw50_2023-12-29.csv`. It was excluded from the "
         f"experiment universe (universe size N = {len(tw50_universe)}) and "
         "therefore has no checkpoint. Update paper Table 4 caption to state "

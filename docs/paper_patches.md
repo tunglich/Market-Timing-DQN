@@ -28,7 +28,7 @@ The four accuracy tiers $\rho \in \{55, 60, 65, 75\}\,\%$ correspond to the
 target directional accuracy of the DES signal, not to a look-back window.}
 ```
 
-**Rationale.** The paper narrative currently cites `2150` (崇越電) inline as
+**Rationale.** The paper narrative currently cites `2150` (Chong Yueh Electronics) inline as
 a TW50 constituent. The 2023-12-29 constituent list actually contains 50
 tickers with 2150 already dropped, so no checkpoint was ever produced for it.
 Naming the exclusion in the caption avoids reviewer confusion when they cross

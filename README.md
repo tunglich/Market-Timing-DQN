@@ -160,7 +160,7 @@ Single-symbol runs (`--symbol AAPL --accuracy 75`, or the legacy
 
 ### Universe & known omissions
 
-- **TW50 symbol 2150 (崇越電)** is cited in the paper narrative but is
+- **TW50 symbol 2150 (Chong Yueh Electronics)** is cited in the paper narrative but is
   **not** part of the 2023-12-29 constituent list in
   [data/tw50_2023-12-29.csv](data/tw50_2023-12-29.csv). It was excluded from
   the experiment universe (N = 50) and therefore has no shipped checkpoint

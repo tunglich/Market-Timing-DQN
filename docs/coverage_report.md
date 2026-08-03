@@ -21,7 +21,7 @@ TW50 symbols with a 75 % checkpoint (14): `1101`, `2382`, `2603`, `2801`, `2880`
 
 ## Known omissions (documented, not bugs)
 
-- **TW50 symbol 2150 (崇越電)**: cited in the paper narrative but not present in `data/tw50_2023-12-29.csv`. It was excluded from the experiment universe (universe size N = 50) and therefore has no checkpoint. Update paper Table 4 caption to state "N = 50 constituents, 2150 excluded".
+- **TW50 symbol 2150 (Chong Yueh Electronics)**: cited in the paper narrative but not present in `data/tw50_2023-12-29.csv`. It was excluded from the experiment universe (universe size N = 50) and therefore has no checkpoint. Update paper Table 4 caption to state "N = 50 constituents, 2150 excluded".
 
 ## Missing checkpoints
 
