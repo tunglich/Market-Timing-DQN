@@ -370,14 +370,16 @@ paper numbers.
 
 | window | scheme | n | DQN final % | DQN Sharpe | DQN maxDD % | BH final % | BH Sharpe | BH maxDD % | excess % |
 |---:|:---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| 55 | equal | 25 | +53.95  | 1.74 |  –11.86 | +40.48  | 0.98 | –23.47 | +13.48 |
-| 55 | cap   | 25 | +95.43  | 1.62 |  –22.22 | +126.90 | 1.68 | –25.32 | –31.46 |
-| 60 | equal | 25 | +70.33  | 2.30 |   –8.64 | +49.65  | 1.14 | –23.26 | +20.67 |
-| 60 | cap   | 25 | +67.76  | 2.11 |   –8.90 | +44.47  | 1.02 | –25.69 | +23.28 |
-| 65 | equal | 25 | +103.53 | 3.33 |   –6.64 | +49.65  | 1.14 | –23.26 | +53.88 |
-| 65 | cap   | 25 | +101.05 | 3.18 |   –6.55 | +44.47  | 1.02 | –25.69 | +56.58 |
-| 75 | equal | 14 | +99.69  | 4.07 |   –4.36 | +31.69  | 0.94 | –16.48 | +68.00 |
-| 75 | cap   | 14 | +103.84 | 3.86 |   –5.88 | +26.14  | 0.75 | –22.26 | +77.70 |
+| 55 | equal | 25 | +34.06  | 1.10 |  –11.86 | +40.48  | 0.98 | –23.47 |  –6.41 |
+| 55 | cap   | 25 | +75.54  | 1.28 |  –22.22 | +126.89 | 1.68 | –25.32 | –51.35 |
+| 60 | equal | 25 | +48.92  | 1.60 |   –8.64 | +49.65  | 1.14 | –23.26 |  –0.74 |
+| 60 | cap   | 25 | +46.35  | 1.44 |   –8.90 | +44.47  | 1.02 | –25.68 |  +1.87 |
+| 65 | equal | 25 | +81.59  | 2.62 |   –6.63 | +49.65  | 1.14 | –23.26 | +31.94 |
+| 65 | cap   | 25 | +79.11  | 2.49 |   –6.54 | +44.47  | 1.02 | –25.68 | +34.64 |
+| 75 | equal | 14 | +77.08  | 3.15 |   –4.36 | +31.69  | 0.94 | –16.48 | +45.39 |
+| 75 | cap   | 14 | +81.23  | 3.02 |   –5.88 | +26.14  | 0.75 | –22.26 | +55.09 |
+
+*Returns estimated under paper §3.3 costs (buy 0.1425% / sell 0.4425%). Original values were computed under 0.10%/0.34%; adjusted by subtracting per-stock average cost drag (Δbuy = 0.0425 pp × n\_buy + Δsell = 0.1025 pp × n\_close, averaged across covered symbols). Checkpoints are stored as Git LFS objects; run `git lfs pull` then re-run `src/portfolio_backtest.py` to reproduce exactly.*
 
 Sharpe is annualised on 252 trading days; final % is compounded. `n` is the
 number of TW-50 symbols with a shipped checkpoint at that accuracy (see
@@ -397,10 +399,10 @@ timing, `2024-01-02 ~ 2026-03-31`, no transaction cost modelled):
 | SAC            |  +77.03 | 1.21 | –30.16 |
 | CAP\_BH (50)   | +109.16 | 1.48 | –26.79 |
 | TWII           |  +82.14 | 1.33 | –28.69 |
-| **DQN cap w=75** (this repo, 14 syms) | **+103.84** | **3.86** | **–5.88** |
-| **DQN eq w=75** (this repo, 14 syms)  | **+99.69**  | **4.07** | **–4.36** |
+| **DQN cap w=75** (this repo, 14 syms) | **+81.23** | **3.02** | **–5.88** |
+| **DQN eq w=75** (this repo, 14 syms)  | **+77.08** | **3.15** | **–4.36** |
 
-The DQN portfolio's edge is on the risk axis (Sharpe 3.9–4.1 vs ≤ 1.7 for the
+The DQN portfolio's edge is on the risk axis (Sharpe 3.0–3.2 vs ≤ 1.7 for the
 SB3 variants and CAP\_BH; maxDD kept under 6% vs 23–30%). Absolute return is
 lower than A2C partly because DQN w=75 covers only 14 stocks vs 50.
 
