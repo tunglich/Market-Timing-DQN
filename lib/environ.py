@@ -8,9 +8,13 @@ import numpy as np
 from . import data
 
 DEFAULT_BARS_COUNT = 10
-DEFAULT_COMMISSION_PERC = 0.15
-DEFAULT_COMMISSION_BUY_PERC = 0.10
-DEFAULT_COMMISSION_SELL_PERC = 0.30
+# Transaction costs as reported in §3.3 of the paper:
+#   Buy  : 0.1425 %  (broker fee, TW retail standard)
+#   Sell : 0.4425 %  (0.1425 % broker fee + 0.30 % securities transaction tax)
+# These are the values used to train and evaluate all shipped checkpoints.
+DEFAULT_COMMISSION_PERC = 0.1425          # legacy symmetric fallback (unused by default)
+DEFAULT_COMMISSION_BUY_PERC = 0.1425     # §3.3 buy cost
+DEFAULT_COMMISSION_SELL_PERC = 0.4425    # §3.3 sell cost (broker + STT)
 
 
 class Actions(enum.Enum):

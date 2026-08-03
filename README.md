@@ -7,7 +7,7 @@ Framework: PyTorch + Gymnasium + [ptan](https://github.com/Shmuma/ptan).
 
 - Input features per bar: `<DES>, <OPEN>, <HIGH>, <LOW>, <CLOSE>` (no volume, no sentiment).
 - Actions: `Skip / Buy / Close` (long-only single position, no leverage).
-- Commissions (TW retail defaults): **buy 0.10 %** / **sell 0.34 %** (0.14 % broker fee tier + 0.30 % securities transaction tax already baked into sell).
+- Commissions (TW retail, §3.3): **buy 0.1425 %** / **sell 0.4425 %** (0.1425 % broker fee + 0.30 % securities transaction tax).
 - Accuracies shipped: `55 %`, `60 %`, `65 %`, `75 %` (target directional accuracy `ρ` of the `<DES>` signal).
 - Validation scheme (new code): **5-fold contiguous walk-forward** on `2005-01 ~ 2023-12`.
 - Test window (held out): **`2024-01-02 ~ 2026-03-30`**.
@@ -53,7 +53,7 @@ Framework: PyTorch + Gymnasium + [ptan](https://github.com/Shmuma/ptan).
                     │  src/train_dqn.py                    │  StocksEnv (Skip/Buy/Close)
                     │        (Stage 3)                     │  1-D CNN (DQNConv1DLarge)
                     │                                      │  PER + n-step (n=2) Double DQN
-                    │                                      │  buy 0.10 % / sell 0.34 %
+                    │                                      │  buy 0.1425 % / sell 0.4425 %
                     │                                      │  Adaptive ε / β schedule
                     └────────────────────┬─────────────────┘  Best val ckpt per fold
                                          │
@@ -268,7 +268,7 @@ Useful `train_dqn.py` flags:
 | `--batch-size` | `128` | mini-batch for PER sampling |
 | `--bars` | `10` | context length fed to the 1-D CNN |
 | `--lr` / `--gamma` | `1e-4` / `0.95` | Adam LR / discount |
-| `--commission-buy` / `--commission-sell` | `0.10` / `0.34` | TW retail defaults (%) |
+| `--commission-buy` / `--commission-sell` | `0.1425` / `0.4425` | TW retail defaults per §3.3 (%) |
 | `--data-dir` | `data/` | CSV directory to load from |
 | `--saves-root` | `saves/` | output root for fold checkpoints and TB logs |
 | `--cpu` | off | force CPU even if CUDA is available |
@@ -366,7 +366,7 @@ data.
 These are diagnostic upper-bounds (see the next section), not the final
 paper numbers.
 
-### TW-50 portfolio numbers (`src/portfolio_backtest.py`, 2024-01-02 ~ 2026-03-30, TW retail costs 0.10 / 0.34%)
+### TW-50 portfolio numbers (`src/portfolio_backtest.py`, 2024-01-02 ~ 2026-03-30, TW retail costs 0.1425 / 0.4425% per §3.3)
 
 | window | scheme | n | DQN final % | DQN Sharpe | DQN maxDD % | BH final % | BH Sharpe | BH maxDD % | excess % |
 |---:|:---:|---:|---:|---:|---:|---:|---:|---:|---:|

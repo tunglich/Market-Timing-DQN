@@ -6,7 +6,7 @@ Configuration is intentionally narrow compared to the internal
 * Features       : ``<DES> + <OHLC>``  (no volume, no sentiment)
 * State encoder  : 1-D CNN (``DQNConv1DLarge``) with ``bars_count=10``
 * Reward         : realised P&L (no Sharpe shaping, no idle penalty)
-* Commissions    : buy 0.10 % / sell 0.34 % (TW retail with 0.30 % tax)
+* Commissions    : buy 0.1425 % / sell 0.4425 % (TW retail: 0.1425 % broker fee + 0.30 % STT, §3.3)
 * Replay         : prioritised (PER) + n-step return
 * Validation     : 5-fold contiguous walk-forward (see ``src/walk_forward.py``)
 * Test           : 2024-01-02 ~ 2026-03-30 (see ``src/backtest.py``)
@@ -60,8 +60,8 @@ def default_cfg() -> dict:
         "epsilon_ratio": 0.8,
         "beta_ratio": 0.9,
         # environment
-        "commission_buy": 0.10,
-        "commission_sell": 0.34,
+        "commission_buy": 0.1425,   # §3.3: TW retail broker fee
+        "commission_sell": 0.4425,  # §3.3: broker fee + 0.30% securities transaction tax
         "reset_on_close": False,
         "reward_on_close": False,
         "state_1d": True,

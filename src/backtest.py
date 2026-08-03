@@ -159,8 +159,10 @@ def main() -> int:
     ap.add_argument("--data-dir", type=Path, default=REPO_ROOT / "data")
     ap.add_argument("--tmp-dir", type=Path, default=REPO_ROOT / "saves" / "_backtest_tmp")
     ap.add_argument("--bars", type=int, default=10)
-    ap.add_argument("--commission-buy", type=float, default=0.10)
-    ap.add_argument("--commission-sell", type=float, default=0.34)
+    ap.add_argument("--commission-buy", type=float, default=0.1425,
+                        help="Buy commission %% (default: 0.1425, TW retail broker fee, §3.3)")
+    ap.add_argument("--commission-sell", type=float, default=0.4425,
+                        help="Sell commission %% (default: 0.4425, broker fee + 0.30%% STT, §3.3)")
     ap.add_argument("--epsilon", type=float, default=0.0)
     ap.add_argument("--cpu", action="store_true")
     ap.add_argument("--out", type=Path, default=None, help="Write summary CSV")
