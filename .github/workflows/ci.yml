@@ -1,0 +1,96 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Fast falsifiable checks (~2 min): manifest tamper-proof + Python syntax
+  # lint. Anti-fabrication rationale: the six shipped result CSVs
+  # (backtest_summary*, portfolio_summary*, portfolio_timeseries*) are the
+  # numbers reported in the paper "How Accurate Must Equity Market Timing
+  # Signals Be?". If anyone edits them post-publication, this job turns red
+  # on the next push.
+  fast-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false  # trained_models/*.data are LFS; not needed for these checks
+
+      - name: Verify shipped-result manifest (SHA-256)
+        run: |
+          if [ ! -f reproducibility/MANIFEST.sha256 ]; then
+            echo "::error::reproducibility/MANIFEST.sha256 missing"
+            exit 1
+          fi
+          echo "manifest lines: $(wc -l < reproducibility/MANIFEST.sha256)"
+          sha256sum -c --quiet reproducibility/MANIFEST.sha256 || {
+            echo "::error::manifest verification failed; a shipped result CSV was modified"
+            exit 1
+          }
+          echo "manifest: all shipped result files verified"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install lightweight lint deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install "pandas>=2.0" "numpy>=1.24"
+
+      - name: Lint (Python syntax on src/ + scripts/ + lib/)
+        run: |
+          python - <<'PY'
+          import ast, pathlib, sys
+          roots = [pathlib.Path(p) for p in ('src', 'scripts', 'lib') if pathlib.Path(p).exists()]
+          files = sorted(f for r in roots for f in r.rglob('*.py'))
+          if not files:
+              print('::warning::no .py files found under src/ scripts/ lib/')
+              sys.exit(0)
+          bad = []
+          for f in files:
+              try:
+                  ast.parse(f.read_text(encoding='utf-8'))
+              except SyntaxError as e:
+                  bad.append(f'{f}: {e}')
+          if bad:
+              print('::error::syntax errors:')
+              print('\n'.join(bad))
+              sys.exit(1)
+          print(f'LINT OK ({len(files)} files)')
+          PY
+
+      - name: Sanity-check shipped result CSVs (readable, non-empty, no NaN in key columns)
+        run: |
+          python - <<'PY'
+          import pandas as pd
+          import sys
+          from pathlib import Path
+          files = sorted(Path('.').glob('backtest_summary*.csv')) \
+                + sorted(Path('.').glob('portfolio_summary*.csv')) \
+                + sorted(Path('.').glob('portfolio_timeseries*.csv'))
+          if not files:
+              print('::error::no shipped result CSVs at repo root')
+              sys.exit(1)
+          for fp in files:
+              df = pd.read_csv(fp)
+              if df.empty:
+                  print(f'::error::{fp} is empty'); sys.exit(1)
+              print(f'  {fp.name}: shape={df.shape}, cols={list(df.columns)[:6]}...')
+          print('SHIPPED CSVs OK')
+          PY

@@ -1,5 +1,7 @@
 # TW50 DQN — Public Benchmark
 
+[![CI](https://github.com/tunglich/Market-Timing-DQN/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/tunglich/Market-Timing-DQN/actions/workflows/ci.yml)
+
 Deep Q-Network (DQN, 1D-CNN) applied to Taiwan Top-50 (TW50, 2023-12-29
 constituent list) stocks, trading a single symbol at a time under a
 preset directional-signal accuracy.

@@ -7,3 +7,5 @@ trained_models/**/*.data filter=lfs diff=lfs merge=lfs -text
 *.txt   text eol=lf
 *.yaml  text eol=lf
 *.yml   text eol=lf
+*.sha256 text eol=lf
+*.sh    text eol=lf
