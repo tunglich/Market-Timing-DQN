@@ -1,52 +1,52 @@
-﻿序號,股票代號,公司名稱,"市值(億元, 2023-12-29)",投組權重(%),註記
-1,2330,台積電,153777.18,41.31%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-2,2317,鴻海,14486.82,3.89%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-3,2454,聯發科,16236.42,4.36%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-4,2308,台達電,8143.3,2.19%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-5,2303,聯電,6590.69,1.77%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-6,2412,中華電,9308.94,2.50%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-7,1303,南亞,5274,1.42%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-8,2881,富邦金,8433.7,2.27%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-9,2891,中信金,5551.86,1.49%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-10,2002,中鋼,4248.41,1.14%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-11,2882,國泰金,6711.16,1.80%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-12,3711,日月光投控,5913.27,1.59%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-13,2886,兆豐金,5645.32,1.52%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-14,1301,台塑,5041.67,1.35%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-15,1216,統一,4233.1,1.14%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-16,2884,玉山金,4041.31,1.09%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-17,5871,中租-KY,3116.12,0.84%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-18,2892,第一金,3731.92,1.00%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-19,2885,元大金,3502.19,0.94%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-20,5880,合庫金,3927.4,1.06%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-21,3034,聯詠,3146,0.85%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-22,3008,大立光,3830.53,1.03%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-23,1101,台泥,2694.3,0.72%,補充值；採 StockAnalysis 的 2023/12/29 歷史市值，單位：億元
-24,1326,台化,3651.52,0.98%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-25,2880,華南金,3049.15,0.82%,補充值；採 StockAnalysis 的 2023/12/29 歷史市值，單位：億元
-26,2382,廣達,8671.6,2.33%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-27,2327,國巨,2502.4,0.67%,補充值；採 StockAnalysis 的 2023/12/29 歷史市值，單位：億元
-28,2883,開發金,2113.3,0.57%,補充值；採 StockAnalysis 的 2023/12/29 歷史市值，單位：億元
-29,2207,和泰車,3949.85,1.06%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-30,2357,華碩,3635.81,0.98%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-31,2890,永豐金,2440.1,0.66%,補充值；採 StockAnalysis 的 2023/12/29 歷史市值，單位：億元
-32,2379,瑞昱,2418.2,0.65%,補充值；採 StockAnalysis 的 2023/12/29 歷史市值，單位：億元
-33,2887,台新金,2258.3,0.61%,補充值；採 StockAnalysis 的 2023/12/29 歷史市值，單位：億元
-34,2603,長榮,3037.1,0.82%,補充值；採 StockAnalysis 的 2023/12/29 歷史市值，單位：億元
-35,3045,台灣大,3671.14,0.99%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-36,1590,亞德客-KY,2020,0.54%,補充值；採 StockAnalysis 的 2023/12/29 歷史市值，單位：億元
-37,3037,欣興,2682,0.72%,補充值；採 StockAnalysis 的 2023/12/29 歷史市值，單位：億元
-38,5876,上海商銀,2269.9,0.61%,補充值；採 StockAnalysis 的 2023/12/29 歷史市值，單位：億元
-39,2912,統一超,2801.8,0.75%,補充值；採 StockAnalysis 的 2023/12/29 歷史市值，單位：億元
-40,2395,研華,3187.04,0.86%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-41,2801,彰銀,1943.6,0.52%,補充值；採 StockAnalysis 的 2023/12/29 歷史市值，單位：億元
-42,4904,遠傳,2600.3,0.70%,補充值；採 StockAnalysis 的 2023/12/29 歷史市值，單位：億元
-43,6505,台塑化,7687.45,2.07%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-44,4938,和碩,2326,0.62%,補充值；採 StockAnalysis 的 2023/12/29 歷史市值，單位：億元
-45,2301,光寶科,2680.5,0.72%,補充值；採 StockAnalysis 的 2023/12/29 歷史市值，單位：億元
-46,2345,智邦,2918.1,0.78%,補充值；採 StockAnalysis 的 2023/12/29 歷史市值，單位：億元
-47,3231,緯創,2801.3,0.75%,補充值；採 StockAnalysis 的 2023/12/29 歷史市值，單位：億元
-48,6669,緯穎,3190.83,0.86%,官方值；以 2023/12/29 收盤對應的 2023 年底發行市值，單位：億元
-49,9910,豐泰,1728.1,0.46%,補充值；採 StockAnalysis 的 2023/12/29 歷史市值，單位：億元
-50,2408,南亞科,2416.5,0.65%,補充值；採 StockAnalysis 的 2023/12/29 歷史市值，單位：億元
+rank,symbol,company_name,"market_cap_TWD_bn (2023-12-29)",portfolio_weight(%),note
+1,2330,TSMC,153777.18,41.31%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+2,2317,Hon Hai,14486.82,3.89%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+3,2454,MediaTek,16236.42,4.36%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+4,2308,Delta Electronics,8143.3,2.19%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+5,2303,UMC,6590.69,1.77%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+6,2412,Chunghwa Telecom,9308.94,2.50%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+7,1303,Nan Ya Plastics,5274,1.42%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+8,2881,Fubon Financial,8433.7,2.27%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+9,2891,CTBC Financial,5551.86,1.49%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+10,2002,China Steel,4248.41,1.14%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+11,2882,Cathay Financial,6711.16,1.80%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+12,3711,ASE Technology,5913.27,1.59%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+13,2886,Mega Financial,5645.32,1.52%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+14,1301,Formosa Plastics,5041.67,1.35%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+15,1216,Uni-President,4233.1,1.14%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+16,2884,E.Sun Financial,4041.31,1.09%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+17,5871,Chailease-KY,3116.12,0.84%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+18,2892,First Financial,3731.92,1.00%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+19,2885,Yuanta Financial,3502.19,0.94%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+20,5880,Taiwan Cooperative Financial,3927.4,1.06%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+21,3034,Novatek,3146,0.85%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+22,3008,Largan Precision,3830.53,1.03%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+23,1101,Taiwan Cement,2694.3,0.72%,supplemental; historical market cap from StockAnalysis at 2023-12-29 (TWD bn)
+24,1326,Formosa Chemicals,3651.52,0.98%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+25,2880,Hua Nan Financial,3049.15,0.82%,supplemental; historical market cap from StockAnalysis at 2023-12-29 (TWD bn)
+26,2382,Quanta Computer,8671.6,2.33%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+27,2327,Yageo,2502.4,0.67%,supplemental; historical market cap from StockAnalysis at 2023-12-29 (TWD bn)
+28,2883,CDIB Financial,2113.3,0.57%,supplemental; historical market cap from StockAnalysis at 2023-12-29 (TWD bn)
+29,2207,Hotai Motor,3949.85,1.06%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+30,2357,ASUS,3635.81,0.98%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+31,2890,SinoPac Financial,2440.1,0.66%,supplemental; historical market cap from StockAnalysis at 2023-12-29 (TWD bn)
+32,2379,Realtek,2418.2,0.65%,supplemental; historical market cap from StockAnalysis at 2023-12-29 (TWD bn)
+33,2887,Taishin Financial,2258.3,0.61%,supplemental; historical market cap from StockAnalysis at 2023-12-29 (TWD bn)
+34,2603,Evergreen Marine,3037.1,0.82%,supplemental; historical market cap from StockAnalysis at 2023-12-29 (TWD bn)
+35,3045,Taiwan Mobile,3671.14,0.99%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+36,1590,Airtac-KY,2020,0.54%,supplemental; historical market cap from StockAnalysis at 2023-12-29 (TWD bn)
+37,3037,Unimicron,2682,0.72%,supplemental; historical market cap from StockAnalysis at 2023-12-29 (TWD bn)
+38,5876,Shanghai Commercial Bank,2269.9,0.61%,supplemental; historical market cap from StockAnalysis at 2023-12-29 (TWD bn)
+39,2912,President Chain Store,2801.8,0.75%,supplemental; historical market cap from StockAnalysis at 2023-12-29 (TWD bn)
+40,2395,Advantech,3187.04,0.86%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+41,2801,Changhua Bank,1943.6,0.52%,supplemental; historical market cap from StockAnalysis at 2023-12-29 (TWD bn)
+42,4904,Far EasTone,2600.3,0.70%,supplemental; historical market cap from StockAnalysis at 2023-12-29 (TWD bn)
+43,6505,Formosa Petrochemical,7687.45,2.07%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+44,4938,Pegatron,2326,0.62%,supplemental; historical market cap from StockAnalysis at 2023-12-29 (TWD bn)
+45,2301,Lite-On Technology,2680.5,0.72%,supplemental; historical market cap from StockAnalysis at 2023-12-29 (TWD bn)
+46,2345,Accton Technology,2918.1,0.78%,supplemental; historical market cap from StockAnalysis at 2023-12-29 (TWD bn)
+47,3231,Wistron,2801.3,0.75%,supplemental; historical market cap from StockAnalysis at 2023-12-29 (TWD bn)
+48,6669,Wiwynn,3190.83,0.86%,official; year-end 2023 market cap at 2023-12-29 close (TWD bn)
+49,9910,Feng Tay,1728.1,0.46%,supplemental; historical market cap from StockAnalysis at 2023-12-29 (TWD bn)
+50,2408,Nanya Technology,2416.5,0.65%,supplemental; historical market cap from StockAnalysis at 2023-12-29 (TWD bn)
 Total,,,372237.5,,
