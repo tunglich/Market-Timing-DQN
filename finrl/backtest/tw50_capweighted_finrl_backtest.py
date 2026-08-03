@@ -31,6 +31,10 @@ DATA_DIR = FINRL_ROOT.parent / "data"                    # Market-Timing-DQN/dat
 TW50_LIST = DATA_DIR / "tw50_2023-12-29.csv"
 os.chdir(FINRL_ROOT)
 sys.path.insert(0, str(FINRL_ROOT))
+# Seed all RNGs for Figure 8 reproducibility (override via FINRL_SEED env var).
+from finrl_seeds import read_seed_from_env, set_finrl_seeds
+SEED = set_finrl_seeds(read_seed_from_env(default=42))
+
 
 from finrl.agents.stablebaselines3.models import DRLAgent
 from tw50_capweighted_env import CapAnchoredPortfolioEnv

@@ -12,13 +12,14 @@ Framework: PyTorch + Gymnasium + [ptan](https://github.com/Shmuma/ptan).
 - Validation scheme (new code): **5-fold contiguous walk-forward** on `2005-01 ~ 2023-12`.
 - Test window (held out): **`2024-01-02 ~ 2026-03-30`**.
 
-> **Naming convention (legacy).** Throughout the code and CLI, the numbers
-> `55 / 60 / 65 / 75` are exposed as `--window` and appear in filenames as
-> `<sym>_all_<win>.csv` and `saves/<sym>_all_<win>/`. This is a legacy
-> holdover; the current interpretation is the **target directional accuracy
-> `ρ` (in %)** of the `<DES>` signal, matching the accuracy grid in the paper.
-> Existing users can keep passing `--window 75` as before; new prose in this
-> README uses `ρ` / "accuracy" for clarity.
+> **Naming convention (legacy alias).** Throughout the code and CLI, the
+> numbers `55 / 60 / 65 / 75` are the **target directional accuracy `ρ`
+> (in %)** of the `<DES>` signal, matching the accuracy grid in the paper.
+> All four training/backtest CLIs (`src/train_dqn.py`, `src/backtest.py`,
+> `src/portfolio_backtest.py`, `src/walk_forward.py`) accept the flag as
+> either `--accuracy` (paper-facing, preferred in new prose) **or**
+> `--window` (legacy alias, backward-compatible). Filenames continue to use
+> the shorter `<sym>_all_<ρ>.csv` and `saves/<sym>_all_<ρ>/` layout.
 
 ---
 
@@ -35,8 +36,9 @@ Framework: PyTorch + Gymnasium + [ptan](https://github.com/Shmuma/ptan).
                     ┌──────────────────────────────────────┐
                     │  scripts/gen_des_by_accuracy*.py     │  y[i]=1 iff mean(close[i+1..i+h])
                     │        (Stage 1: make features)      │        >= close[i]      (h∈{5,10,20,60})
-                    │  --accuracy ρ  --horizon h  --seed   │  DES = y w.p. ρ/100, else 1-y
-                    │  (or gen_des_clustered.py, Eq. 5)    │  Per-row independent flip (Eq. 2)
+                    │  --accuracy ρ  --horizon h            │  DES = y w.p. ρ/100, else 1-y
+                    │  --seed 42 (default, shipped CSVs)    │  Per-row independent flip (Eq. 2)
+                    │  (or gen_des_clustered.py, Eq. 5)    │  verify: scripts/verify_des.py
                     └────────────────────┬─────────────────┘  → data/<sym>_all_<ρ>.csv
                                          │                    <DATE>,<DES>,<OPEN>,<HIGH>,
                                          │                    <LOW>,<CLOSE>[,<VOLUME>]
@@ -153,8 +155,30 @@ python src/backtest.py --universe tw50  --all --out backtest_summary.csv
 python src/backtest.py --universe dow30 --all --out backtest_summary_dow30.csv
 ```
 
-Single-symbol runs (`--symbol AAPL --window 75`) auto-detect the CSV; no flag
-needed.
+Single-symbol runs (`--symbol AAPL --accuracy 75`, or the legacy
+`--window 75`) auto-detect the CSV; no flag needed.
+
+### Universe & known omissions
+
+- **TW50 symbol 2150 (崇越電)** is cited in the paper narrative but is
+  **not** part of the 2023-12-29 constituent list in
+  [data/tw50_2023-12-29.csv](data/tw50_2023-12-29.csv). It was excluded from
+  the experiment universe (N = 50) and therefore has no shipped checkpoint
+  and no row in [backtest_summary.csv](backtest_summary.csv). Update paper
+  Table 4 caption accordingly.
+- **75 %-accuracy coverage.** The 75 % checkpoint set is smaller than the
+  55 / 60 / 65 % sets: **14 of 50 TW50 symbols** carry a 75 % checkpoint
+  (`1101, 2382, 2603, 2801, 2880, 2883, 2884, 2885, 2886, 2887, 2890, 3045,
+  5880, 6505`), and Figure 7's frontier at ρ = 75 % is estimated on this
+  subset. Dow30 has full 30/30 coverage at 75 %.
+- **Full coverage matrix** — regenerate
+  [docs/coverage_report.md](docs/coverage_report.md) with:
+
+  ```powershell
+  python scripts/report_coverage.py
+  ```
+
+  or `--check` in CI to fail if the on-disk report drifts from the manifests.
 
 ## Install
 
@@ -340,18 +364,47 @@ Cap-weight is defined for `--universe tw50`; price-weight is defined for
 `--universe dow30`. Equal-weight works for both. `--scheme both` expands to
 `(equal, cap)` on TW-50 and `(equal, price)` on Dow-30.
 
-### 4. Rebuild the price data (optional, private source required)
+### 4. Rebuild the price data (optional, raw OHLCV required)
 
 ```powershell
+# option A: point at a custom directory each run
+python scripts/export_top50_data.py --source "C:\path\to\raw_ohlcv" --overwrite
+
+# option B: set an env var once, then run without flags
+$env:MTDQN_RAW_DATA = "C:\path\to\raw_ohlcv"
+python scripts/export_top50_data.py --overwrite
+
+# option C: drop raw CSVs under <repo>/raw_ohlcv/ (default fallback)
 python scripts/export_top50_data.py --overwrite
 ```
 
-This regenerates every `data/<sym>_all_<w>.csv` from a private OHLCV source at
-`d:/DRL/data/` (dropping the `<VOLUME>` column). External users can point
-`--source` at their own directory that produces the same input schema. The
-CSVs already shipped in `data/` are sufficient for training and backtesting —
-you only need this step if you are extending the universe or refreshing the
-data.
+The script no longer hard-codes the author's local `d:/DRL/data/` path. In
+precedence order it uses (1) `--source`, (2) the `MTDQN_RAW_DATA` env var,
+(3) `<repo>/raw_ohlcv/` if it exists. Raw CSVs are expected in the standard
+`<sym>.csv` schema with columns `<DATE>, <OPEN>, <HIGH>, <LOW>, <CLOSE>,
+<VOLUME>` — the script strips `<VOLUME>` and appends `<DES>` per accuracy.
+
+The CSVs already shipped in `data/` are sufficient for training and
+backtesting — you only need this step if you are extending the universe or
+refreshing the data.
+
+### 5. Verify shipped DES columns (optional)
+
+```powershell
+python scripts/verify_des.py                       # marginal check, tol 9%
+python scripts/verify_des.py --tolerance 0.02      # paper-strict check
+python scripts/verify_des.py --compare-to path\to\regen  # bit-exact vs a regenerated set
+```
+
+Marginal mode reads every `data/<sym>_all_<ρ>.csv`, drops rows with a zero
+OHLC entry (pre-IPO padding) or a NaN DES, recomputes the 20-day ground-truth
+directional label, and confirms that the empirical agreement rate falls within
+tolerance of the target `ρ`. All 320 shipped columns pass at the default
+tolerance of 9 percentage points (mean empirical rates 54.24 / 58.49 / 62.84 /
+71.43 % for target 55 / 60 / 65 / 75 %; the small negative bias at ρ = 75 % is
+inherent to the shipped generator). Bit-exact mode requires you to first
+regenerate the DES CSVs into a scratch directory with
+`scripts/gen_des_by_accuracy.py --seed 42` and points `--compare-to` at it.
 
 ## Verified smoke-test numbers (2026-07 build, CPU)
 
@@ -493,9 +546,14 @@ upper-bound diagnostic, not a clean generalisation estimate. To reproduce
 clean numbers, retrain with `src/train_dqn.py` and then run `src/backtest.py`
 against the newly saved checkpoints.
 
-Coverage note: only **89 of the 200** (sym × accuracy) legacy checkpoints exist
-in the source repo. Missing pairs are listed in
-`trained_models/manifest.csv` with `notes = "MISSING legacy checkpoint"`.
+Coverage note: only **89 of the 200** TW50 and **90 of the 120** Dow30
+(sym × accuracy) legacy checkpoints ship with the repo. Per-accuracy split:
+TW50 = 25 / 25 / 25 / 14 at ρ = 55 / 60 / 65 / 75 %; Dow30 = 0 / 30 / 30 / 30
+(ρ = 55 % not shipped for Dow30). Missing pairs are enumerated in
+[trained_models/manifest.csv](trained_models/manifest.csv) with
+`notes = "MISSING legacy checkpoint"`, and a per-symbol matrix (plus the
+documented 2150 omission) is in
+[docs/coverage_report.md](docs/coverage_report.md).
 
 ## Data schema
 

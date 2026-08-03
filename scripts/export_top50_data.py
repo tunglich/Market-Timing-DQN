@@ -1,23 +1,41 @@
 """Export TW50 (2023-12-29 constituents) OHLCV+DES CSVs to the public repo,
 dropping the ``<VOLUME>`` column so only ``<DES> + <OHLC>`` remains.
 
-Source : d:/DRL/data/{sym}_all_{window}.csv    (has <DATE> <DES> <OHLCV>)
-Target : public_tw_dqn/data/{sym}_all_{window}.csv  (drops <VOLUME>)
+Source : ``$MTDQN_RAW_DATA`` (fallback: ``<repo>/raw_ohlcv/``)
+Target : ``<repo>/data/<sym>_all_<window>.csv``  (drops <VOLUME>)
+
+The source directory must contain per-symbol wide-format CSVs
+``{sym}_all_{window}.csv`` with columns ``<DATE> <DES> <OHLCV>``. See the
+"Rebuilding CSVs from raw OHLCV" section of the top-level README for how to
+assemble one from public sources (yfinance for Dow-30, TWSE / finlab for TW-50).
 
 Usage:
-    python scripts/export_top50_data.py
-    python scripts/export_top50_data.py --source d:/DRL/data --overwrite
+    # 1) point MTDQN_RAW_DATA at your raw OHLCV directory:
+    $env:MTDQN_RAW_DATA = "D:/path/to/raw_ohlcv"    # PowerShell
+    export MTDQN_RAW_DATA=/path/to/raw_ohlcv         # bash
+    python scripts/export_top50_data.py --overwrite
+
+    # 2) or pass --source explicitly:
+    python scripts/export_top50_data.py --source D:/path/to/raw_ohlcv --overwrite
 """
 from __future__ import annotations
 
 import argparse
 import csv
+import os
+import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_SOURCE = Path(r"d:/DRL/data")
+FALLBACK_SOURCE = REPO_ROOT / "raw_ohlcv"
 WINDOWS = (55, 60, 65, 75)
 KEEP_COLS = ("<DATE>", "<DES>", "<OPEN>", "<HIGH>", "<LOW>", "<CLOSE>")
+
+
+def resolve_default_source() -> Path:
+    """Prefer ``$MTDQN_RAW_DATA``; fall back to ``<repo>/raw_ohlcv/``."""
+    env = os.environ.get("MTDQN_RAW_DATA", "").strip()
+    return Path(env) if env else FALLBACK_SOURCE
 
 
 def load_tw50_symbols(constituents_csv: Path) -> list[str]:
@@ -83,8 +101,9 @@ def resolve_sources(source_dir: Path, sym: str, window: int) -> list[Path]:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--source", type=Path, default=DEFAULT_SOURCE,
-                    help="Directory containing {sym}_all_{window}.csv originals")
+    ap.add_argument("--source", type=Path, default=None,
+                    help="Directory containing {sym}_all_{window}.csv originals "
+                         "(default: $MTDQN_RAW_DATA, fallback ./raw_ohlcv/)")
     ap.add_argument("--constituents", type=Path,
                     default=None,
                     help="TW50 constituent CSV (default: <source>/tw50_2023-12-29.csv)")
@@ -94,7 +113,23 @@ def main() -> int:
                     help="Rewrite files even if they already exist")
     args = ap.parse_args()
 
-    constituents = args.constituents or (args.source / "tw50_2023-12-29.csv")
+    source = args.source if args.source is not None else resolve_default_source()
+    if not source.is_dir():
+        env_hint = os.environ.get("MTDQN_RAW_DATA", "").strip() or "(unset)"
+        print(
+            f"error: raw OHLCV directory not found: {source}\n"
+            f"  MTDQN_RAW_DATA = {env_hint}\n"
+            f"  fallback path  = {FALLBACK_SOURCE}\n"
+            f"Set the environment variable or pass --source. See the top-level\n"
+            f"README section 'Rebuilding CSVs from raw OHLCV' for the expected schema.",
+            file=sys.stderr,
+        )
+        return 2
+
+    constituents = args.constituents or (source / "tw50_2023-12-29.csv")
+    if not constituents.is_file():
+        print(f"error: missing constituent list: {constituents}", file=sys.stderr)
+        return 2
     symbols = load_tw50_symbols(constituents)
     print(f"TW50 constituents ({len(symbols)}): {symbols}")
 
@@ -113,7 +148,7 @@ def main() -> int:
             dst = args.dest / f"{sym}_all_{w}.csv"
             if dst.exists() and not args.overwrite:
                 continue
-            sources = resolve_sources(args.source, sym, w)
+            sources = resolve_sources(source, sym, w)
             if not sources:
                 missing_src.append(f"{sym}_all_{w} (no usable source)")
                 continue

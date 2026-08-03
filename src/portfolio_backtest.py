@@ -190,7 +190,10 @@ def metrics_from_daily_pct(daily_pct: pd.Series) -> dict:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--universe", choices=sorted(UNIVERSE_FILES), default="tw50")
-    ap.add_argument("--windows", type=int, nargs="+", choices=WINDOWS, default=list(WINDOWS))
+    # `--accuracies` is the paper-facing name; `--windows` is the legacy alias.
+    ap.add_argument("--accuracies", "--windows", type=int, nargs="+", choices=WINDOWS,
+                    default=list(WINDOWS), dest="windows",
+                    help="target directional accuracies rho in percent; legacy alias: --windows")
     ap.add_argument("--scheme", choices=("equal", "cap", "price", "both"), default="both",
                     help="Weighting scheme. 'both' expands to (equal, cap) for tw50 "
                          "and (equal, price) for dow30.")

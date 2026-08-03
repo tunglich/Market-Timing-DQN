@@ -114,6 +114,71 @@ Data files live under `../data/` in this repo:
 Repeat steps 2–4 for the other four variants by substituting the prep / train
 / backtest script names in the table at the top.
 
+### Reproducing Figure 8 end-to-end
+
+Two convenience drivers wire prep → train → backtest for **all 5 variants**
+in one command. They honour the same seeding contract as the individual
+scripts (see below).
+
+```powershell
+# Windows
+$env:FINRL_SEED = "42"    # optional, this is the default
+.\finrl\backtest\run_all.ps1                   # all 5 variants
+.\finrl\backtest\run_all.ps1 -Variants des75   # just the 75 % DES variant
+.\finrl\backtest\run_all.ps1 -Force            # rebuild pickles + retrain
+```
+
+```bash
+# Linux / macOS / WSL
+export FINRL_SEED=42       # optional, this is the default
+bash finrl/backtest/run_all.sh                 # all 5 variants
+bash finrl/backtest/run_all.sh baseline des75  # subset by nickname
+bash finrl/backtest/run_all.sh --force         # rebuild pickles + retrain
+```
+
+Nicknames are `baseline`, `capweighted_finrl`, `des75`, `des65`, `des60`.
+Both drivers skip any variant whose pickles + `agent_sac.zip` already exist
+unless `--force` / `-Force` is passed. The backtest step always runs so that
+`finrl/results/<variant>/summary.txt` is refreshed.
+
+**Runtime estimate.** Single RTX-class GPU: ~4–6 h wall clock for all 5
+variants × 5 agents × 60 000 timesteps. CPU-only: multiply by 3–5×. Per-variant
+memory footprint is dominated by the ~550 MB train / trade pickles.
+
+**Why no pre-trained SB3 zips.** The `stable-baselines3` checkpoints for these
+5 variants total ~2 GB and are **not** shipped in this repo (Git LFS budget +
+external `finrl` package version drift make them a maintenance liability).
+`run_all.sh` / `run_all.ps1` regenerate them locally from the same seed.
+
+### Seeding contract
+
+Every script under `finrl/train/` and `finrl/backtest/` imports `finrl_seeds`
+and executes the equivalent of:
+
+```python
+from finrl_seeds import read_seed_from_env, set_finrl_seeds
+SEED = set_finrl_seeds(read_seed_from_env(default=42))
+```
+
+immediately after `sys.path.insert(0, str(FINRL_ROOT))`. This seeds Python
+`random`, NumPy, PyTorch (CPU + CUDA if present), and SB3's global RNG
+**before** any `DRLAgent` / env constructor runs, so a fresh clone with
+`FINRL_SEED=42` (the default) reproduces Figure 8's 5 curves bit-for-bit on a
+matching hardware / library stack. Override globally with:
+
+```powershell
+$env:FINRL_SEED = "17"      # PowerShell
+```
+
+```bash
+export FINRL_SEED=17        # bash / zsh
+```
+
+Bit-exact reproducibility across GPU vendors / PyTorch minor versions is not
+guaranteed by SB3; the curves match qualitatively but the last few decimals
+of Sharpe will vary. Report the exact torch / CUDA / SB3 versions alongside
+any regenerated Figure 8.
+
 ## Notes on this fork
 
 - `stock_trading_env_fixed.py` is a locally patched copy of

@@ -149,7 +149,9 @@ def resolve_model_path(models_dir: Path, symbol: str, window: int) -> Path:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--symbol")
-    ap.add_argument("--window", type=int, choices=WINDOWS)
+    # `--accuracy` is the paper-facing name; `--window` is the legacy alias.
+    ap.add_argument("--accuracy", "--window", type=int, choices=WINDOWS, dest="window",
+                    help="target directional accuracy rho in percent; legacy alias: --window")
     ap.add_argument("--universe", choices=sorted(UNIVERSE_FILES), default="tw50",
                     help="Constituent universe for --all (default: tw50)")
     ap.add_argument("--all", action="store_true",

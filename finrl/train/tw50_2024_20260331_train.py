@@ -17,6 +17,10 @@ from pathlib import Path
 FINRL_ROOT = Path(__file__).resolve().parent.parent          # Market-Timing-DQN/finrl
 os.chdir(FINRL_ROOT)
 sys.path.insert(0, str(FINRL_ROOT))
+# Seed all RNGs for Figure 8 reproducibility (override via FINRL_SEED env var).
+from finrl_seeds import read_seed_from_env, set_finrl_seeds
+SEED = set_finrl_seeds(read_seed_from_env(default=42))
+
 
 import pandas as pd
 from stable_baselines3.common.logger import configure

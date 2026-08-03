@@ -101,7 +101,10 @@ def build_all_folds(csv_path: Path, out_dir: Path, n_folds: int = N_FOLDS) -> li
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--symbol", required=True, help="e.g. 2330")
-    ap.add_argument("--window", required=True, type=int, choices=(55, 60, 65, 75))
+    # `--accuracy` is the paper-facing name; `--window` is the legacy alias.
+    ap.add_argument("--accuracy", "--window", required=True, type=int,
+                    choices=(55, 60, 65, 75), dest="window",
+                    help="target directional accuracy rho in percent; legacy alias: --window")
     ap.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
     ap.add_argument("--out", type=Path, default=None,
                     help="Directory to write fold CSVs (default: saves/{sym}_all_{window}/)")

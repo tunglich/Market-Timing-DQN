@@ -337,7 +337,10 @@ def _build_argparser() -> argparse.ArgumentParser:
     cfg = default_cfg()
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--symbol", required=True)
-    p.add_argument("--window", required=True, type=int, choices=(55, 60, 65, 75))
+    # `--accuracy` is the paper-facing name; `--window` is the legacy alias.
+    p.add_argument("--accuracy", "--window", required=True, type=int,
+                   choices=(55, 60, 65, 75), dest="window",
+                   help="target directional accuracy rho in percent; legacy alias: --window")
     p.add_argument("--fold", default="all", help="'all' or comma-separated indices, e.g. 0,2,4")
     p.add_argument("--hours", type=float, default=cfg["train_hours"], help="wall-clock budget per fold")
     p.add_argument("--n-envs", type=int, default=cfg["n_envs"])
