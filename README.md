@@ -25,7 +25,64 @@ Framework: PyTorch + Gymnasium + [ptan](https://github.com/Shmuma/ptan).
 
 ## Pipeline
 
-![Pipeline](docs/pipeline_ieee.png)
+```
+                    ┌──────────────────────────────────────┐
+                    │  Raw OHLCV                           │  TW50: data/{Open,High,Low,Close,
+                    │                                      │       Volume}.csv (wide matrix)
+                    │                                      │  Dow30: yfinance auto_adjust=True
+                    └────────────────────┬─────────────────┘
+                                         │
+                                         ▼
+                    ┌──────────────────────────────────────┐
+                    │  scripts/gen_des_by_accuracy*.py     │  y[i]=1 iff mean(close[i+1..i+h])
+                    │        (Stage 1: make features)      │        >= close[i]      (h∈{5,10,20,60})
+                    │  --accuracy ρ  --horizon h            │  DES = y w.p. ρ/100, else 1-y
+                    │  --seed 42 (default, shipped CSVs)    │  Per-row independent flip (Eq. 2)
+                    │  (or gen_des_clustered.py, Eq. 5)    │  verify: scripts/verify_des.py
+                    └────────────────────┬─────────────────┘  → data/<sym>_all_<ρ>.csv
+                                         │                    <DATE>,<DES>,<OPEN>,<HIGH>,
+                                         │                    <LOW>,<CLOSE>[,<VOLUME>]
+                                         ▼
+                    ┌──────────────────────────────────────┐
+                    │  src/walk_forward.py                 │  Trim to date < 2024-01-01
+                    │        (Stage 2)                     │  Drop leading zero-OHLC rows
+                    │                                      │  Split into 5 contiguous chunks
+                    └────────────────────┬─────────────────┘  Emit fold_k_train / fold_k_val CSVs
+                                         │
+                                         │   for k in 0..4  (repeat 5 times)
+                                         ▼
+                    ┌──────────────────────────────────────┐
+                    │  src/train_dqn.py                    │  StocksEnv (Skip/Buy/Close)
+                    │        (Stage 3)                     │  1-D CNN (DQNConv1DLarge)
+                    │                                      │  PER + n-step (n=2) Double DQN
+                    │                                      │  buy 0.1425 % / sell 0.4425 %
+                    │                                      │  Adaptive ε / β schedule
+                    └────────────────────┬─────────────────┘  Best val ckpt per fold
+                                         │
+                                         │   pick best-val ckpt  (or use trained_models/<sym>_all_<ρ>.data)
+                                         ▼
+                    ┌──────────────────────────────────────┐
+                    │  src/backtest.py                     │  Held-out test
+                    │        (Stage 4)                     │  2024-01-02 ~ 2026-03-30
+                    │                                      │  Deterministic ε=0 greedy rollout
+                    │                                      │  Reports model_pct, bh_pct,
+                    │                                      │  excess_pct, n_buy / n_close
+                    └────────────────────┬─────────────────┘  → backtest_summary.csv (--all)
+                                         │
+                                         ▼
+                              per-symbol metrics
+                              (model_pct vs BH,
+                               50 syms × 4 accuracies)
+                                         │
+                                         ▼
+                    ┌──────────────────────────────────────┐
+                    │  src/portfolio_backtest.py           │  Aggregation
+                    │        (Stage 5)                     │  equal / cap (TW-50)
+                    │                                      │  equal / price (Dow-30)
+                    │                                      │  → portfolio_summary.csv
+                    │                                      │  → portfolio_timeseries.csv
+                    └──────────────────────────────────────┘
+```
 
 **Stage 1 (make features)** takes raw OHLCV plus two knobs — target accuracy
 `ρ ∈ [50, 100]` and forecast horizon `h ∈ {5, 10, 20, 60}` — and emits one
