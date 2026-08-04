@@ -68,7 +68,7 @@ def _arrow(ax, x1, y1, x2, y2, *, lw=1.2):
 
 
 def main() -> None:
-    fig, ax = plt.subplots(figsize=(14.0, 3.2), dpi=200)
+    fig, ax = plt.subplots(figsize=(21.0, 4.8), dpi=200)
     fig.patch.set_facecolor(BG)
     ax.set_facecolor(BG)
     ax.set_xlim(0, 50)
